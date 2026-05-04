@@ -22,15 +22,6 @@ class Post
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $media_1_url = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $media_2_url = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $media_3_url = null;
-
     #[ORM\ManyToOne(inversedBy: 'posts')]
     #[ORM\JoinColumn(nullable: false)]
     private ?UserProfile $user = null;
@@ -41,9 +32,16 @@ class Post
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'posts')]
     private Collection $categories;
 
+    /**
+     * @var Collection<int, Media>
+     */
+    #[ORM\OneToMany(targetEntity: Media::class, mappedBy: 'post', orphanRemoval: true)]
+    private Collection $media;
+
     public function __construct()
     {
         $this->categories = new ArrayCollection();
+        $this->media = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -71,42 +69,6 @@ class Post
     public function setDescription(?string $description): static
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    public function getMedia1Url(): ?string
-    {
-        return $this->media_1_url;
-    }
-
-    public function setMedia1Url(string $media_1_url): static
-    {
-        $this->media_1_url = $media_1_url;
-
-        return $this;
-    }
-
-    public function getMedia2Url(): ?string
-    {
-        return $this->media_2_url;
-    }
-
-    public function setMedia2Url(?string $media_2_url): static
-    {
-        $this->media_2_url = $media_2_url;
-
-        return $this;
-    }
-
-    public function getMedia3Url(): ?string
-    {
-        return $this->media_3_url;
-    }
-
-    public function setMedia3Url(?string $media_3_url): static
-    {
-        $this->media_3_url = $media_3_url;
 
         return $this;
     }
@@ -143,6 +105,36 @@ class Post
     public function removeCategory(Category $category): static
     {
         $this->categories->removeElement($category);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Media>
+     */
+    public function getMedia(): Collection
+    {
+        return $this->media;
+    }
+
+    public function addMedium(Media $medium): static
+    {
+        if (!$this->media->contains($medium)) {
+            $this->media->add($medium);
+            $medium->setPost($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMedium(Media $medium): static
+    {
+        if ($this->media->removeElement($medium)) {
+            // set the owning side to null (unless already changed)
+            if ($medium->getPost() === $this) {
+                $medium->setPost(null);
+            }
+        }
 
         return $this;
     }

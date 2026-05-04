@@ -6,9 +6,12 @@ use App\Repository\UserProfileRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserProfileRepository::class)]
-class UserProfile
+#[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
+class UserProfile implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -18,8 +21,11 @@ class UserProfile
     #[ORM\Column(length: 255)]
     private ?string $username = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 180)]
     private ?string $email = null;
+
+    #[ORM\Column]
+    private array $roles = [];
 
     #[ORM\Column(length: 255)]
     private ?string $password = null;
@@ -27,29 +33,23 @@ class UserProfile
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $avatar_url = null;
 
-    /**
-     * @var Collection<int, Post>
-     */
     #[ORM\OneToMany(targetEntity: Post::class, mappedBy: 'user')]
     private Collection $posts;
 
-    /**
-     * @var Collection<int, Conversation>
-     */
     #[ORM\OneToMany(targetEntity: Conversation::class, mappedBy: 'user_profile')]
     private Collection $conversations;
 
-    /**
-     * @var Collection<int, Conversation>
-     */
     #[ORM\OneToMany(targetEntity: Conversation::class, mappedBy: 'interlocuteur')]
     private Collection $interlocutorConversations;
 
-    /**
-     * @var Collection<int, Message>
-     */
     #[ORM\OneToMany(targetEntity: Message::class, mappedBy: 'sender')]
     private Collection $messages;
+
+    /**
+     * @var Collection<int, Conversation>
+     */
+    #[ORM\OneToMany(targetEntity: Conversation::class, mappedBy: 'interlocutor')]
+    private Collection $conversationsAsInterlocutor;
 
     public function __construct()
     {
@@ -57,6 +57,7 @@ class UserProfile
         $this->conversations = new ArrayCollection();
         $this->interlocutorConversations = new ArrayCollection();
         $this->messages = new ArrayCollection();
+        $this->conversationsAsInterlocutor = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -72,7 +73,6 @@ class UserProfile
     public function setUsername(string $username): static
     {
         $this->username = $username;
-
         return $this;
     }
 
@@ -84,10 +84,36 @@ class UserProfile
     public function setEmail(string $email): static
     {
         $this->email = $email;
-
         return $this;
     }
 
+    /**
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->email;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        $roles[] = 'ROLE_USER'; // Garantit au moins un rôle
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): static
+    {
+        $this->roles = $roles;
+        return $this;
+    }
+
+    /**
+     * @see PasswordAuthenticatedUserInterface
+     */
     public function getPassword(): ?string
     {
         return $this->password;
@@ -96,7 +122,6 @@ class UserProfile
     public function setPassword(string $password): static
     {
         $this->password = $password;
-
         return $this;
     }
 
@@ -108,124 +133,70 @@ class UserProfile
     public function setAvatarUrl(?string $avatar_url): static
     {
         $this->avatar_url = $avatar_url;
-
         return $this;
     }
 
     /**
-     * @return Collection<int, Post>
+     * @see UserInterface
      */
+    public function eraseCredentials(): void
+    {
+        // Nettoyer les données sensibles temporaires si besoin
+    }
+
+    public function __serialize(): array
+    {
+        $data = (array) $this;
+        $data["\0".self::class."\0password"] = hash('crc32c', $this->password);
+        return $data;
+    }
+
+    // --- RELATIONS ---
+
     public function getPosts(): Collection
     {
         return $this->posts;
     }
 
-    public function addPost(Post $post): static
-    {
-        if (!$this->posts->contains($post)) {
-            $this->posts->add($post);
-            $post->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removePost(Post $post): static
-    {
-        if ($this->posts->removeElement($post)) {
-            // set the owning side to null (unless already changed)
-            if ($post->getUser() === $this) {
-                $post->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Conversation>
-     */
     public function getConversations(): Collection
     {
         return $this->conversations;
     }
 
-    public function addConversation(Conversation $conversation): static
-    {
-        if (!$this->conversations->contains($conversation)) {
-            $this->conversations->add($conversation);
-            $conversation->setUserProfile($this);
-        }
-
-        return $this;
-    }
-
-    public function removeConversation(Conversation $conversation): static
-    {
-        if ($this->conversations->removeElement($conversation)) {
-            // set the owning side to null (unless already changed)
-            if ($conversation->getUserProfile() === $this) {
-                $conversation->setUserProfile(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Conversation>
-     */
     public function getInterlocutorConversations(): Collection
     {
         return $this->interlocutorConversations;
     }
 
-    public function addInterlocutorConversation(Conversation $interlocutorConversation): static
-    {
-        if (!$this->interlocutorConversations->contains($interlocutorConversation)) {
-            $this->interlocutorConversations->add($interlocutorConversation);
-            $interlocutorConversation->setInterlocuteur($this);
-        }
-
-        return $this;
-    }
-
-    public function removeInterlocutorConversation(Conversation $interlocutorConversation): static
-    {
-        if ($this->interlocutorConversations->removeElement($interlocutorConversation)) {
-            // set the owning side to null (unless already changed)
-            if ($interlocutorConversation->getInterlocuteur() === $this) {
-                $interlocutorConversation->setInterlocuteur(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Message>
-     */
     public function getMessages(): Collection
     {
         return $this->messages;
     }
 
-    public function addMessage(Message $message): static
+    /**
+     * @return Collection<int, Conversation>
+     */
+    public function getConversationsAsInterlocutor(): Collection
     {
-        if (!$this->messages->contains($message)) {
-            $this->messages->add($message);
-            $message->setSender($this);
+        return $this->conversationsAsInterlocutor;
+    }
+
+    public function addConversationsAsInterlocutor(Conversation $conversationsAsInterlocutor): static
+    {
+        if (!$this->conversationsAsInterlocutor->contains($conversationsAsInterlocutor)) {
+            $this->conversationsAsInterlocutor->add($conversationsAsInterlocutor);
+            $conversationsAsInterlocutor->setInterlocutor($this);
         }
 
         return $this;
     }
 
-    public function removeMessage(Message $message): static
+    public function removeConversationsAsInterlocutor(Conversation $conversationsAsInterlocutor): static
     {
-        if ($this->messages->removeElement($message)) {
+        if ($this->conversationsAsInterlocutor->removeElement($conversationsAsInterlocutor)) {
             // set the owning side to null (unless already changed)
-            if ($message->getSender() === $this) {
-                $message->setSender(null);
+            if ($conversationsAsInterlocutor->getInterlocutor() === $this) {
+                $conversationsAsInterlocutor->setInterlocutor(null);
             }
         }
 

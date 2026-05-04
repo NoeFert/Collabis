@@ -32,6 +32,13 @@ class Conversation
     #[ORM\OneToMany(targetEntity: Message::class, mappedBy: 'conversation')]
     private Collection $messages;
 
+    #[ORM\ManyToOne]
+    private ?Post $post = null;
+
+    #[ORM\ManyToOne(inversedBy: 'conversationsAsInterlocutor')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?UserProfile $interlocutor = null;
+
     public function __construct()
     {
         $this->messages = new ArrayCollection();
@@ -104,6 +111,30 @@ class Conversation
                 $message->setConversation(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPost(): ?Post
+    {
+        return $this->post;
+    }
+
+    public function setPost(?Post $post): static
+    {
+        $this->post = $post;
+
+        return $this;
+    }
+
+    public function getInterlocutor(): ?UserProfile
+    {
+        return $this->interlocutor;
+    }
+
+    public function setInterlocutor(?UserProfile $interlocutor): static
+    {
+        $this->interlocutor = $interlocutor;
 
         return $this;
     }
