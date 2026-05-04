@@ -11,12 +11,15 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Validator\Constraints\File;
 
 class RegistrationFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('username')
             ->add('email')
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
@@ -41,6 +44,22 @@ class RegistrationFormType extends AbstractType
                         // max length allowed by Symfony for security reasons
                         max: 4096,
                     ),
+                ],
+            ])
+            ->add('avatar', FileType::class, [
+                'label' => 'Photo de profil (Optionnelle)',
+                'mapped' => false, // Très important !
+                'required' => false,
+                'constraints' => [
+                    new File([
+                        'maxSize' => '2M', // Limite le poids du fichier
+                        'mimeTypes' => [
+                            'image/jpeg',
+                            'image/png',
+                            'image/webp',
+                        ],
+                        'mimeTypesMessage' => 'Veuillez uploader une image valide (JPEG, PNG, WEBP)',
+                    ])
                 ],
             ])
         ;

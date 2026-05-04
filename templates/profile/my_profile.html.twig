@@ -1,0 +1,7 @@
+{# Si l'utilisateur a un avatar #}
+{% if app.user.avatarUrl %}
+    <img src="{{ asset('uploads/avatars/' ~ app.user.avatarUrl) }}" alt="Avatar de {{ app.user.username }}" width="50">
+{% else %}
+    {# Image par défaut s'il n'en a pas mis #}
+    <img src="{{ asset('images/default-avatar.png') }}" alt="Avatar par défaut" width="50">
+{% endif %}
