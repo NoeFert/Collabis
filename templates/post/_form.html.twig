@@ -1,4 +1,7 @@
 {{ form_start(form) }}
     {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+    <div class="d-flex justify-content-end gap-2 mt-4">
+        <a href="{{ path('app_post_index') }}" class="btn btn-light rounded-pill px-4">Annuler</a>
+        <button class="btn btn-primary rounded-pill px-4">{{ button_label|default('Enregistrer') }}</button>
+    </div>
 {{ form_end(form) }}

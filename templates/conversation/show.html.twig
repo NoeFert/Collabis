@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Conversation - Collabis{% endblock %}
+
+{% block body %}
+{% set otherUser = conversation.userProfile and conversation.userProfile.id == app.user.id ? conversation.interlocuteur : conversation.userProfile %}
+
+<div class="container page-shell">
+    <div class="mb-4">
+        <a href="{{ path('app_conversation') }}" class="text-decoration-none">
+            <i class="bi bi-arrow-left me-1"></i> Retour aux messages
+        </a>
+    </div>
+
+    <div class="page-header">
+        <div>
+            <p class="page-kicker">{{ conversation.post ? conversation.post.title : conversation.subject }}</p>
+            <h1 class="fw-bold mb-0">{{ otherUser ? otherUser.username : 'Conversation' }}</h1>
+        </div>
+        {% if conversation.post %}
+            <a href="{{ path('app_post_show', {'id': conversation.post.id}) }}" class="btn btn-outline-primary rounded-pill">
+                <i class="bi bi-box-arrow-up-right me-1"></i> Voir l’annonce
+            </a>
+        {% endif %}
+    </div>
+
+    <div class="bg-white border rounded-3 shadow-sm">
+        <div class="p-4" style="min-height: 360px;">
+            {% for message in conversation.messages %}
+                {% set isMine = message.sender.id == app.user.id %}
+                <div class="d-flex mb-3 {{ isMine ? 'justify-content-end' : 'justify-content-start' }}">
+                    <div class="p-3 rounded-3 {{ isMine ? 'bg-primary text-white' : 'bg-light text-dark' }}" style="max-width: 75%;">
+                        <p class="mb-1">{{ message.content|nl2br }}</p>
+                        <small class="{{ isMine ? 'text-white-50' : 'text-muted' }}">{{ message.datetime|date('d/m/Y H:i') }}</small>
+                    </div>
+                </div>
+            {% else %}
+                <div class="h-100 d-flex align-items-center justify-content-center text-center py-5">
+                    <div>
+                        <i class="bi bi-chat-square-text fs-1 text-primary"></i>
+                        <h2 class="h5 fw-bold mt-3">La conversation est prête</h2>
+                        <p class="text-muted mb-0">Envoyez un premier message pour lancer l’échange.</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <form method="post" action="{{ path('app_conversation_message', {'id': conversation.id}) }}" class="border-top p-3">
+            <input type="hidden" name="_token" value="{{ csrf_token('send_message' ~ conversation.id) }}">
+            <div class="d-flex gap-2">
+                <textarea name="content" class="form-control" rows="2" required placeholder="Écrire un message"></textarea>
+                <button class="btn btn-primary rounded-circle flex-shrink-0" type="submit" aria-label="Envoyer" title="Envoyer" style="width: 48px; height: 48px;">
+                    <i class="bi bi-send"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

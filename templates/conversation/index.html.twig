@@ -1,20 +1,51 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ConversationController!{% endblock %}
+{% block title %}Messages - Collabis{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+<div class="container page-shell">
+    <div class="page-header">
+        <div>
+            <p class="page-kicker">Messagerie</p>
+            <h1 class="fw-bold mb-0">Messages</h1>
+        </div>
+        <a href="{{ path('app_post_index') }}" class="btn btn-outline-primary rounded-pill">
+            <i class="bi bi-search me-1"></i> Explorer
+        </a>
+    </div>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>/home/devugo/dev/Collabis/src/Controller/ConversationController.php</code></li>
-        <li>Your template at <code>/home/devugo/dev/Collabis/templates/conversation/index.html.twig</code></li>
-    </ul>
+    {% if conversations is empty %}
+        <div class="bg-white border rounded-3 p-5 text-center shadow-sm">
+            <i class="bi bi-chat-dots fs-1 text-primary"></i>
+            <h2 class="h4 fw-bold mt-3">Aucune conversation pour le moment</h2>
+            <p class="text-muted mb-4">Quand vous contacterez un propriétaire depuis une annonce, l’échange apparaîtra ici.</p>
+            <a href="{{ path('app_post_index') }}" class="btn btn-primary rounded-pill px-4">Trouver une annonce</a>
+        </div>
+    {% else %}
+        <div class="list-group shadow-sm">
+            {% for conversation in conversations %}
+                {% set otherUser = conversation.userProfile and conversation.userProfile.id == app.user.id ? conversation.interlocuteur : conversation.userProfile %}
+                {% set lastMessage = conversation.messages|last %}
+                <a href="{{ path('app_conversation_show', {'id': conversation.id}) }}" class="list-group-item list-group-item-action border-0 border-bottom p-4">
+                    <div class="d-flex justify-content-between gap-3">
+                        <div>
+                            <p class="page-kicker mb-1">{{ conversation.post ? conversation.post.title : conversation.subject }}</p>
+                            <h2 class="h5 fw-bold mb-1">{{ otherUser ? otherUser.username : 'Membre Collabis' }}</h2>
+                            <p class="text-muted mb-0">
+                                {% if lastMessage %}
+                                    {{ lastMessage.sender.id == app.user.id ? 'Vous : ' : '' }}{{ lastMessage.content|slice(0, 120) }}{% if lastMessage.content|length > 120 %}...{% endif %}
+                                {% else %}
+                                    Conversation ouverte, aucun message pour le moment.
+                                {% endif %}
+                            </p>
+                        </div>
+                        {% if lastMessage %}
+                            <small class="text-muted text-nowrap">{{ lastMessage.datetime|date('d/m/Y H:i') }}</small>
+                        {% endif %}
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    {% endif %}
 </div>
 {% endblock %}
