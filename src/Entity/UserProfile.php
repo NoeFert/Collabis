@@ -41,7 +41,7 @@ class UserProfile implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Conversation::class, mappedBy: 'user_profile')]
     private Collection $conversations;
 
-    #[ORM\OneToMany(targetEntity: Conversation::class, mappedBy: 'interlocuteur')]
+    #[ORM\OneToMany(targetEntity: Conversation::class, mappedBy: 'interlocutor')]
     private Collection $interlocutorConversations;
 
     #[ORM\OneToMany(targetEntity: Message::class, mappedBy: 'sender')]

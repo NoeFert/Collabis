@@ -24,7 +24,7 @@
     {% else %}
         <div class="list-group shadow-sm">
             {% for conversation in conversations %}
-                {% set otherUser = conversation.userProfile and conversation.userProfile.id == app.user.id ? conversation.interlocuteur : conversation.userProfile %}
+                {% set otherUser = conversation.userProfile and conversation.userProfile.id == app.user.id ? conversation.interlocutor : conversation.userProfile %}
                 {% set lastMessage = conversation.messages|last %}
                 <a href="{{ path('app_conversation_show', {'id': conversation.id}) }}" class="list-group-item list-group-item-action border-0 border-bottom p-4">
                     <div class="d-flex justify-content-between gap-3">

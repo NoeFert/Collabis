@@ -3,7 +3,7 @@
 {% block title %}Conversation - Collabis{% endblock %}
 
 {% block body %}
-{% set otherUser = conversation.userProfile and conversation.userProfile.id == app.user.id ? conversation.interlocuteur : conversation.userProfile %}
+{% set otherUser = conversation.userProfile and conversation.userProfile.id == app.user.id ? conversation.interlocutor : conversation.userProfile %}
 
 <div class="container page-shell">
     <div class="mb-4">
