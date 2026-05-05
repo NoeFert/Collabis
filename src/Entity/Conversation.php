@@ -22,10 +22,6 @@ class Conversation
     #[ORM\JoinColumn(nullable: false)]
     private ?UserProfile $user_profile = null;
 
-    #[ORM\ManyToOne(inversedBy: 'interlocutorConversations')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?UserProfile $interlocuteur = null;
-
     /**
      * @var Collection<int, Message>
      */
@@ -58,7 +54,6 @@ class Conversation
     public function setSubject(?string $subject): static
     {
         $this->subject = $subject;
-
         return $this;
     }
 
@@ -70,19 +65,6 @@ class Conversation
     public function setUserProfile(?UserProfile $user_profile): static
     {
         $this->user_profile = $user_profile;
-
-        return $this;
-    }
-
-    public function getInterlocuteur(): ?UserProfile
-    {
-        return $this->interlocuteur;
-    }
-
-    public function setInterlocuteur(?UserProfile $interlocuteur): static
-    {
-        $this->interlocuteur = $interlocuteur;
-
         return $this;
     }
 
@@ -100,19 +82,16 @@ class Conversation
             $this->messages->add($message);
             $message->setConversation($this);
         }
-
         return $this;
     }
 
     public function removeMessage(Message $message): static
     {
         if ($this->messages->removeElement($message)) {
-            // set the owning side to null (unless already changed)
             if ($message->getConversation() === $this) {
                 $message->setConversation(null);
             }
         }
-
         return $this;
     }
 
@@ -124,7 +103,6 @@ class Conversation
     public function setPost(?Post $post): static
     {
         $this->post = $post;
-
         return $this;
     }
 
@@ -136,7 +114,6 @@ class Conversation
     public function setInterlocutor(?UserProfile $interlocutor): static
     {
         $this->interlocutor = $interlocutor;
-
         return $this;
     }
 }
