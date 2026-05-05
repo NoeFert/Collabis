@@ -1,37 +1,51 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Post index{% endblock %}
+{% block title %}Explorer les annonces - Collabis{% endblock %}
 
 {% block body %}
-    <h1>Post index</h1>
+<div class="container page-shell">
+    <div class="page-header">
+        <div>
+            <p class="page-kicker">Annonces</p>
+            <h1 class="fw-bold mb-0">Explorer les annonces</h1>
+        </div>
+        <a href="{{ path('app_post_new') }}" class="btn btn-primary rounded-pill px-4">
+            <i class="bi bi-plus-lg me-1"></i> Publier
+        </a>
+    </div>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Title</th>
-                <th>Description</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         {% for post in posts %}
-            <tr>
-                <td>{{ post.id }}</td>
-                <td>{{ post.title }}</td>
-                <td>{{ post.description }}</td>
-                <td>
-                    <a href="{{ path('app_post_show', {'id': post.id}) }}">show</a>
-                    <a href="{{ path('app_post_edit', {'id': post.id}) }}">edit</a>
-                </td>
-            </tr>
+            <div class="col">
+                <article class="card h-100 border-0 shadow-sm">
+                    {% if post.media|length > 0 %}
+                        <img src="{{ asset('uploads/' ~ post.media[0].url) }}" class="card-img-top" alt="{{ post.title }}" style="height: 210px; object-fit: cover;">
+                    {% else %}
+                        <div class="bg-light d-flex align-items-center justify-content-center text-muted" style="height: 210px;">
+                            <i class="bi bi-image fs-1"></i>
+                        </div>
+                    {% endif %}
+                    <div class="card-body d-flex flex-column">
+                        <h2 class="h5 fw-bold">{{ post.title }}</h2>
+                        <p class="text-muted flex-grow-1">{{ post.description|slice(0, 140) }}{% if post.description|length > 140 %}...{% endif %}</p>
+                        <div class="d-flex gap-2">
+                            <a href="{{ path('app_post_show', {'id': post.id}) }}" class="btn btn-outline-primary rounded-pill flex-grow-1">Voir l’annonce</a>
+                            <a href="{{ path('app_post_edit', {'id': post.id}) }}" class="btn btn-light rounded-circle" title="Modifier" aria-label="Modifier {{ post.title }}">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                        </div>
+                    </div>
+                </article>
+            </div>
         {% else %}
-            <tr>
-                <td colspan="4">no records found</td>
-            </tr>
+            <div class="col-12">
+                <div class="text-center bg-white border rounded-3 py-5">
+                    <h2 class="h4 fw-bold">Aucune annonce pour le moment</h2>
+                    <p class="text-muted mb-4">L’espace est prêt, il ne manque plus qu’une première proposition.</p>
+                    <a href="{{ path('app_post_new') }}" class="btn btn-primary rounded-pill px-4">Créer une annonce</a>
+                </div>
+            </div>
         {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_post_new') }}">Create new</a>
+    </div>
+</div>
 {% endblock %}

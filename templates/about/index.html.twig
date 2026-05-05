@@ -3,6 +3,30 @@
 {% block title %}À propos de Collabis{% endblock %}
 
 {% block body %}
-    <h1>À propos de nous</h1>
-    <p>Ceci est la future page de présentation du projet.</p>
+<div class="container page-shell">
+    <div class="page-header">
+        <div>
+            <p class="page-kicker">Concept</p>
+            <h1 class="fw-bold mb-0">À propos de Collabis</h1>
+        </div>
+        <a href="{{ path('app_post_index') }}" class="btn btn-primary rounded-pill px-4">Explorer les annonces</a>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="bg-white border rounded-3 p-4 shadow-sm">
+                <p class="lead mb-0">Collabis facilite l’entraide locale entre étudiants : proposer un service, partager un outil, demander un coup de main et entrer en contact simplement.</p>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="bg-white border rounded-3 p-4 shadow-sm">
+                <h2 class="h5 fw-bold">Commencer</h2>
+                <div class="d-grid gap-2 mt-3">
+                    <a href="{{ path('app_post_index') }}" class="btn btn-outline-primary rounded-pill">Voir les annonces</a>
+                    <a href="{{ path('app_post_new') }}" class="btn btn-primary rounded-pill">Publier une annonce</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

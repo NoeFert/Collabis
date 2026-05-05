@@ -1,11 +1,21 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Post{% endblock %}
+{% block title %}Publier une annonce - Collabis{% endblock %}
 
 {% block body %}
-    <h1>Create new Post</h1>
+<div class="container page-shell">
+    <div class="page-header">
+        <div>
+            <p class="page-kicker">Nouvelle annonce</p>
+            <h1 class="fw-bold mb-0">Publier une annonce</h1>
+        </div>
+        <a href="{{ path('app_post_index') }}" class="btn btn-outline-secondary rounded-pill">
+            <i class="bi bi-arrow-left me-1"></i> Explorer
+        </a>
+    </div>
 
-    {{ include('post/_form.html.twig') }}
-
-    <a href="{{ path('app_post_index') }}">back to list</a>
+    <div class="bg-white border rounded-3 p-4 shadow-sm">
+        {{ include('post/_form.html.twig', {'button_label': 'Publier'}) }}
+    </div>
+</div>
 {% endblock %}

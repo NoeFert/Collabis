@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{% block title %}Collabis - Plateforme d'entraide{% endblock %}</title>
-        <icon rel="shortcut icon" href="data:image/x-icon;base64,..." />
+        <link rel="shortcut icon" href="data:image/x-icon;base64,..." />
 
         <!-- --- STYLES --- -->
         <!-- Bootstrap 5 -->
@@ -15,27 +15,79 @@
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
 
         <style>
-        
+            :root {
+                --collabis-primary: #3182ce;
+                --collabis-primary-dark: #2b6cb0;
+                --collabis-ink: #1f2937;
+                --collabis-muted: #64748b;
+                --collabis-surface: #ffffff;
+            }
+
             body {
                 font-family: 'Inter', sans-serif;
                 background-color: #f8f9fa;
+                color: var(--collabis-ink);
             }
             .navbar {
                 transition: all 0.3s ease;
+            }
+            .navbar-brand {
+                letter-spacing: 0;
             }
             .nav-link {
                 color: #4a5568 !important;
                 transition: color 0.2s ease;
             }
-            .nav-link:hover {
-                color: #3182ce !important;
+            .nav-link:hover,
+            .nav-link.active {
+                color: var(--collabis-primary) !important;
+            }
+            .nav-link.active {
+                font-weight: 700 !important;
             }
             .btn-primary {
-                background-color: #3182ce;
+                background-color: var(--collabis-primary);
                 border: none;
             }
             .btn-primary:hover {
-                background-color: #2b6cb0;
+                background-color: var(--collabis-primary-dark);
+            }
+            .app-main {
+                min-height: calc(100vh - 180px);
+            }
+            .page-shell {
+                padding-top: 3rem;
+                padding-bottom: 3rem;
+            }
+            .page-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 1rem;
+                margin-bottom: 1.5rem;
+            }
+            .page-kicker {
+                color: var(--collabis-muted);
+                font-size: .95rem;
+                margin-bottom: .35rem;
+            }
+            .card {
+                border-radius: .5rem;
+            }
+            .dropdown-item.active,
+            .dropdown-item:active {
+                background-color: var(--collabis-primary);
+            }
+            @media (max-width: 991.98px) {
+                .navbar-actions {
+                    align-items: stretch !important;
+                    gap: .75rem !important;
+                    padding-top: 1rem;
+                }
+                .navbar-actions > .btn,
+                .navbar-actions > a.btn {
+                    width: 100%;
+                }
             }
 
         </style>
@@ -51,6 +103,8 @@
     <body>
         
         <!-- --- NAVBAR MODERNE --- -->
+        {% set current_route = app.request.attributes.get('_route') %}
+
         <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top py-3">
             <div class="container">
                 <!-- Logo -->
@@ -67,23 +121,22 @@
                     <!-- Liens Centraux -->
                     <ul class="navbar-nav mx-auto">
                         <li class="nav-item">
-                            <a class="nav-link px-3 fw-medium" href="{{ path('app_home') }}">Accueil</a>
+                            <a class="nav-link px-3 fw-medium {{ current_route == 'app_home' ? 'active' : '' }}" href="{{ path('app_home') }}">Accueil</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link px-3 fw-medium" href="{{ path('app_post_index') }}">Explorer</a>
+                            <a class="nav-link px-3 fw-medium {{ current_route starts with 'app_post_' ? 'active' : '' }}" href="{{ path('app_post_index') }}">Explorer</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link px-3 fw-medium" href="{{ path('app_about') }}">Concept</a>
+                            <a class="nav-link px-3 fw-medium {{ current_route == 'app_about' ? 'active' : '' }}" href="{{ path('app_about') }}">Concept</a>
                         </li>
                     </ul>
 
                     <!-- Partie Droite (Actions) -->
-                    <div class="d-flex align-items-center gap-3">
+                    <div class="navbar-actions d-flex align-items-center gap-3">
                         {% if app.user %}
                             <!-- Icône Message -->
-                            <a href="{{ path('app_conversation') }}" class="btn btn-light rounded-circle position-relative p-2" title="Messages">
+                            <a href="{{ path('app_conversation') }}" class="btn {{ current_route starts with 'app_conversation' ? 'btn-primary' : 'btn-light' }} rounded-circle position-relative p-2" title="Messages" aria-label="Messages">
                                 <i class="bi bi-chat-dots fs-5"></i>
-                                <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
                             </a>
 
                             <!-- Menu Profil Déroulant -->
@@ -96,8 +149,8 @@
                                 <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-3">
                                     <li><h6 class="dropdown-header text-muted">Connecté en tant que : <br><small class="text-primary">{{ app.user.email }}</small></h6></li>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item py-2" href="{{ path('app_my_profile') }}"><i class="bi bi-person me-2"></i>Mon Profil</a></li>
-                                    <li><a class="dropdown-item py-2" href="#"><i class="bi bi-gear me-2"></i>Paramètres</a></li>
+                                    <li><a class="dropdown-item py-2 {{ current_route == 'app_my_profile' ? 'active' : '' }}" href="{{ path('app_my_profile') }}"><i class="bi bi-person me-2"></i>Mon profil</a></li>
+                                    <li><a class="dropdown-item py-2 {{ current_route == 'app_conversation' ? 'active' : '' }}" href="{{ path('app_conversation') }}"><i class="bi bi-chat-dots me-2"></i>Messages</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item py-2 text-danger" href="{{ path('app_logout') }}"><i class="bi bi-box-arrow-right me-2"></i>Déconnexion</a></li>
                                 </ul>
@@ -108,7 +161,7 @@
                         {% endif %}
 
                         <!-- Bouton Publier toujours visible -->
-                        <a href="{{ path('app_post_new') }}" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm">
+                        <a href="{{ path('app_post_new') }}" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm {{ current_route == 'app_post_new' ? 'active' : '' }}">
                             <i class="bi bi-plus-lg me-1"></i> Publier
                         </a>
                     </div>
@@ -117,7 +170,18 @@
         </nav>
 
         <!-- --- CONTENU PRINCIPAL --- -->
-        <main>
+        <main class="app-main">
+            {% for label, messages in app.flashes %}
+                <div class="container mt-3">
+                    {% for message in messages %}
+                        <div class="alert alert-{{ label == 'error' ? 'danger' : label }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+
             {% block body %}{% endblock %}
         </main>
 

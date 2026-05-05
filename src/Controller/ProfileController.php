@@ -6,12 +6,14 @@ use App\Entity\UserProfile;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class ProfileController extends AbstractController
 {
 
     // Profil personnel (réservé à l'utilisateur connecté)
     #[Route('/my-profile', name: 'app_my_profile')]
+    #[IsGranted('ROLE_USER')]
     public function myProfile(): Response
     {
         return $this->render('profile/my_profile.html.twig', [
