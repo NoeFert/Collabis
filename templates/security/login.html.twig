@@ -1,34 +1,239 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Log in!{% endblock %}
+{% block title %}Connexion - Collabis{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        .auth-shell {
+            padding-bottom: 3rem;
+            padding-top: 3rem;
+        }
+
+        .auth-card {
+            animation: authEnter .28s ease-out;
+            background: #ffffff;
+            border: 1px solid rgba(100, 116, 139, .16);
+            border-radius: 1.5rem;
+            box-shadow: 0 24px 70px rgba(15, 23, 42, .14);
+            min-height: 560px;
+            overflow: hidden;
+        }
+
+        .auth-form-panel,
+        .auth-side-panel {
+            min-height: 560px;
+        }
+
+        .auth-form-panel {
+            padding: 2.5rem;
+        }
+
+        .auth-side-panel {
+            background: linear-gradient(135deg, var(--collabis-primary), #1f9d7a);
+            color: #ffffff;
+            overflow: hidden;
+            padding: 2.5rem;
+            position: relative;
+        }
+
+        .auth-side-panel::before {
+            background-image: radial-gradient(rgba(255, 255, 255, .24) 1px, transparent 1px);
+            background-size: 20px 20px;
+            content: "";
+            inset: 0;
+            opacity: .65;
+            position: absolute;
+        }
+
+        .auth-side-panel > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .auth-floating-card {
+            background: rgba(255, 255, 255, .16);
+            border: 1px solid rgba(255, 255, 255, .28);
+            backdrop-filter: blur(10px);
+        }
+
+        .auth-icon-btn {
+            height: 42px;
+            width: 42px;
+        }
+
+        .auth-input {
+            background-color: #f1f5f9;
+            border: 1px solid transparent;
+            border-radius: .75rem;
+            padding: .85rem 1rem;
+        }
+
+        .auth-input:focus {
+            background-color: #ffffff;
+            border-color: rgba(49, 130, 206, .45);
+            box-shadow: 0 0 0 .25rem rgba(49, 130, 206, .12);
+        }
+
+        .auth-switch {
+            background: #f1f5f9;
+            border-radius: 999px;
+            padding: .25rem;
+        }
+
+        .auth-switch a {
+            border-radius: 999px;
+            color: var(--collabis-muted);
+            font-weight: 700;
+            padding: .6rem 1rem;
+            text-align: center;
+            text-decoration: none;
+            transition: all .2s ease;
+            width: 50%;
+        }
+
+        .auth-switch a.active {
+            background: #ffffff;
+            box-shadow: 0 8px 20px rgba(15, 23, 42, .08);
+            color: var(--collabis-primary);
+        }
+
+        @keyframes authEnter {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 991.98px) {
+            .auth-card,
+            .auth-form-panel,
+            .auth-side-panel {
+                min-height: auto;
+            }
+
+            .auth-side-panel {
+                border-radius: 0 0 1.5rem 1.5rem;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .auth-form-panel,
+            .auth-side-panel {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+{% endblock %}
 
 {% block body %}
-<form method="post">
-    {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
+<div class="container auth-shell">
+    <div class="auth-card">
+        <div class="row g-0">
+            <div class="col-lg-6">
+                <div class="auth-form-panel d-flex flex-column justify-content-center">
+                    <div class="mb-4">
+                        <p class="page-kicker">Connexion</p>
+                        <h1 class="fw-bold mb-2">Ravi de vous revoir</h1>
+                        <p class="text-muted mb-0">Connectez-vous pour publier une annonce, répondre aux étudiants et retrouver vos conversations.</p>
+                    </div>
 
-    {% if app.user %}
-        <div class="mb-3">
-            You are logged in as {{ app.user.userIdentifier }}, <a href="{{ logout_path() }}">Logout</a>
+                    <div class="auth-switch d-flex mb-4">
+                        <a href="{{ path('app_login') }}" class="active">Connexion</a>
+                        <a href="{{ path('app_register') }}">Inscription</a>
+                    </div>
+
+                    {% if error %}
+                        <div class="alert alert-danger rounded-3">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                    {% endif %}
+
+                    {% if app.user %}
+                        <div class="alert alert-info rounded-3">
+                            Vous êtes connecté avec {{ app.user.userIdentifier }}.
+                            <a href="{{ logout_path() }}" class="alert-link">Se déconnecter</a>
+                        </div>
+                    {% endif %}
+
+                    <div class="d-flex gap-2 mb-4" aria-label="Connexions rapides">
+                        <button type="button" class="btn btn-light border rounded-circle auth-icon-btn" title="Google" aria-label="Google">
+                            <i class="bi bi-google"></i>
+                        </button>
+                        <button type="button" class="btn btn-light border rounded-circle auth-icon-btn" title="GitHub" aria-label="GitHub">
+                            <i class="bi bi-github"></i>
+                        </button>
+                        <button type="button" class="btn btn-light border rounded-circle auth-icon-btn" title="LinkedIn" aria-label="LinkedIn">
+                            <i class="bi bi-linkedin"></i>
+                        </button>
+                    </div>
+
+                    <form method="post" class="vstack gap-3">
+                        <div>
+                            <label for="inputEmail" class="form-label fw-semibold">Adresse email</label>
+                            <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control auth-input" autocomplete="email" placeholder="vous@collabis.ch" required autofocus>
+                        </div>
+
+                        <div>
+                            <label for="inputPassword" class="form-label fw-semibold">Mot de passe</label>
+                            <input type="password" name="password" id="inputPassword" class="form-control auth-input" autocomplete="current-password" placeholder="Votre mot de passe" required>
+                        </div>
+
+                        <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
+
+                        <div class="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-2">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="_remember_me" id="rememberMe">
+                                <label class="form-check-label text-muted" for="rememberMe">Se souvenir de moi</label>
+                            </div>
+                            <a href="{{ path('app_register') }}" class="text-decoration-none fw-semibold">Créer un compte</a>
+                        </div>
+
+                        <button class="btn btn-primary btn-lg rounded-pill mt-2" type="submit">
+                            <i class="bi bi-box-arrow-in-right me-1"></i> Se connecter
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <aside class="auth-side-panel d-flex flex-column justify-content-between">
+                    <div>
+                        <a class="d-inline-flex align-items-center text-white text-decoration-none fw-bold fs-4 mb-5" href="{{ path('app_home') }}">
+                            <i class="bi bi-rocket-takeoff-fill me-2"></i> COLLABIS
+                        </a>
+                        <h2 class="display-6 fw-bold mb-3">Une annonce peut lancer une vraie entraide.</h2>
+                        <p class="mb-4 opacity-75">Rejoignez les échanges du campus, proposez vos compétences et trouvez rapidement les ressources qui vous manquent.</p>
+                        <a href="{{ path('app_register') }}" class="btn btn-outline-light rounded-pill px-4">
+                            S’inscrire
+                        </a>
+                    </div>
+
+                    <div class="auth-floating-card rounded-3 p-4 mt-5">
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="bg-white text-primary rounded-circle d-flex align-items-center justify-content-center" style="height: 44px; width: 44px;">
+                                <i class="bi bi-chat-heart fs-4"></i>
+                            </div>
+                            <div>
+                                <p class="fw-bold mb-0">Messagerie intégrée</p>
+                                <small class="opacity-75">Contactez directement depuis une annonce.</small>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="bg-white text-success rounded-circle d-flex align-items-center justify-content-center" style="height: 44px; width: 44px;">
+                                <i class="bi bi-people fs-4"></i>
+                            </div>
+                            <div>
+                                <p class="fw-bold mb-0">Communauté étudiante</p>
+                                <small class="opacity-75">Des échanges simples, locaux et utiles.</small>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+            </div>
         </div>
-    {% endif %}
-
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-    <label for="inputEmail">Email</label>
-    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
-    <label for="inputPassword">Password</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
-    <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
-
-    <div class="checkbox mb-3">
-        <label>
-            <input type="checkbox" name="_remember_me"> Remember me
-        </label>
     </div>
-
-    <button class="btn btn-lg btn-primary" type="submit">
-        Sign in
-    </button>
-</form>
+</div>
 {% endblock %}

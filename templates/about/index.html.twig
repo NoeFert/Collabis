@@ -2,31 +2,193 @@
 
 {% block title %}À propos de Collabis{% endblock %}
 
+{% block stylesheets %}
+    <style>
+        .concept-hero {
+            background: linear-gradient(135deg, #ffffff 0%, #eef7ff 54%, #f2fbf5 100%);
+            border: 1px solid rgba(49, 130, 206, .14);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .concept-hero::after {
+            background-image: radial-gradient(rgba(49, 130, 206, .16) 1px, transparent 1px);
+            background-size: 18px 18px;
+            content: "";
+            inset: 0;
+            opacity: .55;
+            pointer-events: none;
+            position: absolute;
+        }
+
+        .concept-hero > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .concept-visual {
+            background: #ffffff;
+            border: 1px solid rgba(100, 116, 139, .18);
+            min-height: 320px;
+        }
+
+        .concept-node {
+            border: 1px solid rgba(100, 116, 139, .16);
+            box-shadow: 0 12px 28px rgba(15, 23, 42, .08);
+        }
+
+        .concept-step-number {
+            height: 40px;
+            width: 40px;
+        }
+
+        .concept-pill {
+            background: rgba(49, 130, 206, .1);
+            color: var(--collabis-primary-dark);
+        }
+
+        @media (max-width: 767.98px) {
+            .concept-hero {
+                border-radius: .75rem !important;
+            }
+
+            .concept-visual {
+                min-height: auto;
+            }
+        }
+    </style>
+{% endblock %}
+
 {% block body %}
 <div class="container page-shell">
     <div class="page-header">
         <div>
             <p class="page-kicker">Concept</p>
-            <h1 class="fw-bold mb-0">À propos de Collabis</h1>
+            <h1 class="fw-bold mb-0">L’entraide étudiante, au bon endroit</h1>
         </div>
-        <a href="{{ path('app_post_index') }}" class="btn btn-primary rounded-pill px-4">Explorer les annonces</a>
+        <a href="{{ path('app_post_index') }}" class="btn btn-primary rounded-pill px-4">
+            <i class="bi bi-search me-1"></i> Explorer
+        </a>
     </div>
 
-    <div class="row g-4">
-        <div class="col-lg-8">
-            <div class="bg-white border rounded-3 p-4 shadow-sm">
-                <p class="lead mb-0">Collabis facilite l’entraide locale entre étudiants : proposer un service, partager un outil, demander un coup de main et entrer en contact simplement.</p>
+    <section class="concept-hero rounded-3 p-4 p-lg-5 shadow-sm mb-4">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6">
+                <span class="concept-pill d-inline-flex align-items-center rounded-pill px-3 py-2 fw-semibold mb-3">
+                    <i class="bi bi-stars me-2"></i> Plateforme collaborative
+                </span>
+                <h2 class="display-6 fw-bold mb-3">Collabis connecte les étudiants qui ont besoin d’un coup de main avec ceux qui peuvent aider.</h2>
+                <p class="lead text-muted mb-4">Une annonce claire, une prise de contact simple, et des échanges plus fluides pour partager un service, un objet, une compétence ou une opportunité locale.</p>
+                <div class="d-flex flex-column flex-sm-row gap-2">
+                    <a href="{{ path('app_post_new') }}" class="btn btn-primary rounded-pill px-4">
+                        <i class="bi bi-plus-lg me-1"></i> Publier une annonce
+                    </a>
+                    <a href="{{ path('app_post_index') }}" class="btn btn-outline-primary rounded-pill px-4">Voir les annonces</a>
+                </div>
             </div>
-        </div>
-        <div class="col-lg-4">
-            <div class="bg-white border rounded-3 p-4 shadow-sm">
-                <h2 class="h5 fw-bold">Commencer</h2>
-                <div class="d-grid gap-2 mt-3">
-                    <a href="{{ path('app_post_index') }}" class="btn btn-outline-primary rounded-pill">Voir les annonces</a>
-                    <a href="{{ path('app_post_new') }}" class="btn btn-primary rounded-pill">Publier une annonce</a>
+            <div class="col-lg-6">
+                <div class="concept-visual rounded-3 p-4 d-flex flex-column justify-content-between shadow-sm">
+                    <div class="d-flex justify-content-between align-items-start gap-3">
+                        <div class="concept-node bg-white rounded-3 p-3">
+                            <i class="bi bi-person-check text-primary fs-3"></i>
+                            <p class="fw-bold mb-0 mt-2">Besoin</p>
+                            <small class="text-muted">Cours, matériel, service</small>
+                        </div>
+                        <div class="concept-node bg-white rounded-3 p-3 mt-4">
+                            <i class="bi bi-chat-dots text-success fs-3"></i>
+                            <p class="fw-bold mb-0 mt-2">Contact</p>
+                            <small class="text-muted">Message direct</small>
+                        </div>
+                    </div>
+                    <div class="text-center py-4">
+                        <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center shadow" style="height: 86px; width: 86px;">
+                            <i class="bi bi-rocket-takeoff fs-1"></i>
+                        </div>
+                        <p class="fw-bold mb-0 mt-3">Un campus plus solidaire</p>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-end gap-3">
+                        <div class="concept-node bg-white rounded-3 p-3 mb-4">
+                            <i class="bi bi-box-seam text-warning fs-3"></i>
+                            <p class="fw-bold mb-0 mt-2">Partage</p>
+                            <small class="text-muted">Objets et ressources</small>
+                        </div>
+                        <div class="concept-node bg-white rounded-3 p-3">
+                            <i class="bi bi-mortarboard text-primary fs-3"></i>
+                            <p class="fw-bold mb-0 mt-2">Compétences</p>
+                            <small class="text-muted">Entraide entre pairs</small>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
+
+    <section class="row row-cols-1 row-cols-md-3 g-4 mb-4">
+        <div class="col">
+            <article class="card h-100 border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <div class="concept-step-number bg-primary-subtle text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold mb-3">1</div>
+                    <h2 class="h5 fw-bold">Publier</h2>
+                    <p class="text-muted mb-0">Décrivez ce que vous cherchez ou proposez avec un titre lisible, une description utile et des photos si elles aident à comprendre.</p>
+                </div>
+            </article>
+        </div>
+        <div class="col">
+            <article class="card h-100 border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <div class="concept-step-number bg-success-subtle text-success rounded-circle d-flex align-items-center justify-content-center fw-bold mb-3">2</div>
+                    <h2 class="h5 fw-bold">Découvrir</h2>
+                    <p class="text-muted mb-0">Parcourez les annonces du moment et repérez rapidement les demandes, services ou ressources qui correspondent à votre besoin.</p>
+                </div>
+            </article>
+        </div>
+        <div class="col">
+            <article class="card h-100 border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <div class="concept-step-number bg-warning-subtle text-warning rounded-circle d-flex align-items-center justify-content-center fw-bold mb-3">3</div>
+                    <h2 class="h5 fw-bold">Échanger</h2>
+                    <p class="text-muted mb-0">Lancez une conversation depuis une annonce et organisez la suite directement avec la bonne personne.</p>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <section class="bg-white border rounded-3 p-4 p-lg-5 shadow-sm">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-7">
+                <p class="page-kicker">Pourquoi Collabis</p>
+                <h2 class="h3 fw-bold mb-3">Moins de bruit, plus de liens utiles.</h2>
+                <p class="text-muted mb-0">Collabis rassemble les petites annonces étudiantes dans un espace simple : assez structuré pour trouver vite, assez humain pour favoriser l’entraide locale.</p>
+            </div>
+            <div class="col-lg-5">
+                <div class="row g-3">
+                    <div class="col-6">
+                        <div class="border rounded-3 p-3 h-100">
+                            <i class="bi bi-shield-check text-primary fs-4"></i>
+                            <p class="fw-bold mb-0 mt-2">Clair</p>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="border rounded-3 p-3 h-100">
+                            <i class="bi bi-lightning-charge text-warning fs-4"></i>
+                            <p class="fw-bold mb-0 mt-2">Rapide</p>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="border rounded-3 p-3 h-100">
+                            <i class="bi bi-people text-success fs-4"></i>
+                            <p class="fw-bold mb-0 mt-2">Local</p>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="border rounded-3 p-3 h-100">
+                            <i class="bi bi-heart text-danger fs-4"></i>
+                            <p class="fw-bold mb-0 mt-2">Solidaire</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 </div>
 {% endblock %}

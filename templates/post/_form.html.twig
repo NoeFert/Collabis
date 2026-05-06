@@ -1,7 +1,36 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <div class="d-flex justify-content-end gap-2 mt-4">
-        <a href="{{ path('app_post_index') }}" class="btn btn-light rounded-pill px-4">Annuler</a>
-        <button class="btn btn-primary rounded-pill px-4">{{ button_label|default('Enregistrer') }}</button>
+{{ form_start(form, {'attr': {'class': 'post-form'}}) }}
+    <div class="vstack gap-4">
+        {{ form_row(form.title, {
+            'label': 'Titre',
+            'attr': {
+                'class': 'form-control form-control-lg',
+                'placeholder': 'Ex. Aide en maths, vélo à prêter...'
+            }
+        }) }}
+
+        {{ form_row(form.description, {
+            'label': 'Description',
+            'attr': {
+                'class': 'form-control',
+                'rows': 7,
+                'placeholder': 'Expliquez simplement ce que vous proposez ou recherchez.'
+            }
+        }) }}
+
+        {{ form_row(form.images, {
+            'attr': {
+                'class': 'form-control'
+            },
+            'help': 'Formats acceptés : JPG, PNG ou WEBP, jusqu’à 5 Mo par image.'
+        }) }}
+    </div>
+
+    {{ form_rest(form) }}
+
+    <div class="d-flex flex-column flex-sm-row justify-content-end gap-2 mt-4 pt-4 border-top">
+        <a href="{{ path('app_post_index') }}" class="btn btn-light rounded-pill px-4 order-2 order-sm-1">Annuler</a>
+        <button class="btn btn-primary rounded-pill px-4 order-1 order-sm-2">
+            <i class="bi bi-check2 me-1"></i>{{ button_label|default('Enregistrer') }}
+        </button>
     </div>
 {{ form_end(form) }}

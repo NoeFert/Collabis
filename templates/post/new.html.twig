@@ -9,13 +9,27 @@
             <p class="page-kicker">Nouvelle annonce</p>
             <h1 class="fw-bold mb-0">Publier une annonce</h1>
         </div>
-        <a href="{{ path('app_post_index') }}" class="btn btn-outline-secondary rounded-pill">
-            <i class="bi bi-arrow-left me-1"></i> Explorer
+        <a href="{{ path('app_post_index') }}" class="btn btn-outline-primary rounded-pill px-4">
+            <i class="bi bi-arrow-left me-1"></i> Retour
         </a>
     </div>
 
-    <div class="bg-white border rounded-3 p-4 shadow-sm">
-        {{ include('post/_form.html.twig', {'button_label': 'Publier'}) }}
+    <div class="row justify-content-center">
+        <div class="col-lg-9 col-xl-8">
+            <section class="bg-white border rounded-3 p-4 p-md-5 shadow-sm">
+                <div class="d-flex align-items-center gap-3 pb-4 mb-4 border-bottom">
+                    <div class="bg-primary-subtle text-primary rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 48px; height: 48px;">
+                        <i class="bi bi-megaphone fs-4"></i>
+                    </div>
+                    <div>
+                        <h2 class="h5 fw-bold mb-1">Détails de l’annonce</h2>
+                        <p class="text-muted mb-0">Ajoutez un titre clair, une description utile et quelques photos si besoin.</p>
+                    </div>
+                </div>
+
+                {{ include('post/_form.html.twig', {'button_label': 'Publier'}) }}
+            </section>
+        </div>
     </div>
 </div>
 {% endblock %}

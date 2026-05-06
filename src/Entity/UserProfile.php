@@ -41,8 +41,8 @@ class UserProfile implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Conversation::class, mappedBy: 'user_profile')]
     private Collection $conversations;
 
-    #[ORM\OneToMany(targetEntity: Conversation::class, mappedBy: 'interlocutor')]
-    private Collection $interlocutorConversations;
+    // #[ORM\OneToMany(targetEntity: Conversation::class, mappedBy: 'interlocutor')]
+    // private Collection $interlocutorConversations;
 
     #[ORM\OneToMany(targetEntity: Message::class, mappedBy: 'sender')]
     private Collection $messages;
@@ -57,7 +57,7 @@ class UserProfile implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->posts = new ArrayCollection();
         $this->conversations = new ArrayCollection();
-        $this->interlocutorConversations = new ArrayCollection();
+        // $this->interlocutorConversations = new ArrayCollection();
         $this->messages = new ArrayCollection();
         $this->conversationsAsInterlocutor = new ArrayCollection();
     }
@@ -165,10 +165,10 @@ class UserProfile implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->conversations;
     }
 
-    public function getInterlocutorConversations(): Collection
-    {
-        return $this->interlocutorConversations;
-    }
+    // public function getInterlocutorConversations(): Collection
+    // {
+    //     return $this->interlocutorConversations;
+    // }
 
     public function getMessages(): Collection
     {
