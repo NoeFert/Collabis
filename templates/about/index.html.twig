@@ -3,192 +3,599 @@
 {% block title %}À propos de Collabis{% endblock %}
 
 {% block stylesheets %}
+    <link href="https://fonts.googleapis.com/css2?family=Antonio:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        .concept-hero {
-            background: linear-gradient(135deg, #ffffff 0%, #eef7ff 54%, #f2fbf5 100%);
-            border: 1px solid rgba(49, 130, 206, .14);
+        :root {
+            --about-black: #222123;
+            --about-main-bg: #1f2937;
+            --about-ink: #1f2937;
+            --about-primary: var(--collabis-primary);
+            --about-primary-dark: var(--collabis-primary-dark);
+            --about-green: #1f9d7a;
+            --about-sky: #eaf6ff;
+            --about-blue-soft: #d8ecff;
+            --about-milk: #f8fbff;
+            --about-cream: #eef7ff;
+            --about-warm: #f3f8ee;
+        }
+
+        .about-spylt {
+            background: var(--about-milk);
+            color: var(--about-ink);
+            font-family: "Antonio", "Inter", sans-serif;
             overflow: hidden;
+        }
+
+        .about-spylt p,
+        .about-spylt a,
+        .about-spylt small {
+            font-family: "Inter", sans-serif;
+        }
+
+        .about-section {
             position: relative;
         }
 
-        .concept-hero::after {
-            background-image: radial-gradient(rgba(49, 130, 206, .16) 1px, transparent 1px);
-            background-size: 18px 18px;
-            content: "";
-            inset: 0;
-            opacity: .55;
-            pointer-events: none;
-            position: absolute;
+        .about-hero {
+            align-items: center;
+            background:
+                radial-gradient(circle at 18% 18%, rgba(49, 130, 206, .18), transparent 28%),
+                linear-gradient(180deg, #ffffff 0%, var(--about-sky) 100%);
+            display: flex;
+            min-height: calc(100vh - 86px);
+            padding: 5rem 1rem 6rem;
         }
 
-        .concept-hero > * {
-            position: relative;
-            z-index: 1;
+        .about-hero-inner {
+            margin: 0 auto;
+            max-width: 1180px;
+            text-align: center;
+            width: 100%;
         }
 
-        .concept-visual {
+        .about-eyebrow {
+            border: 1px solid rgba(49, 130, 206, .28);
+            border-radius: 999px;
+            display: inline-flex;
+            font-size: .85rem;
+            font-weight: 800;
+            letter-spacing: 0;
+            margin-bottom: 1.5rem;
+            padding: .65rem 1rem;
+            text-transform: uppercase;
+        }
+
+        .about-title {
+            font-size: 6rem;
+            font-weight: 700;
+            line-height: .9;
+            margin: 0;
+            overflow: hidden;
+            text-transform: uppercase;
+        }
+
+        .about-title-line {
+            display: block;
+            overflow: hidden;
+        }
+
+        .about-title-char {
+            display: inline-block;
+        }
+
+        .about-clip-frame {
+            border: .35rem solid var(--about-milk);
+            clip-path: polygon(50% 0, 50% 0, 50% 100%, 50% 100%);
+            display: inline-block;
+            margin: .75rem 0 1rem;
+            opacity: 0;
+            transform: rotate(-3deg);
+        }
+
+        .about-clip-frame.is-soft {
+            border-color: var(--about-primary-dark);
+            transform: rotate(3deg);
+        }
+
+        .about-clip-fill {
+            background: var(--about-primary);
+            color: var(--about-cream);
+            font-size: 6rem;
+            font-weight: 700;
+            line-height: .9;
+            padding: .25rem 1rem .65rem;
+            text-transform: uppercase;
+        }
+
+        .about-clip-frame.is-soft .about-clip-fill {
+            background: var(--about-milk);
+            color: var(--about-primary-dark);
+        }
+
+        .about-hero-copy {
+            color: rgba(31, 41, 55, .78);
+            font-size: 1.08rem;
+            line-height: 1.45;
+            margin: 1.5rem auto 0;
+            max-width: 580px;
+        }
+
+        .about-hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .75rem;
+            justify-content: center;
+            margin-top: 2.25rem;
+        }
+
+        .about-button {
+            align-items: center;
+            background: var(--about-primary);
+            border: 0;
+            border-radius: 999px;
+            color: #ffffff;
+            display: inline-flex;
+            font-weight: 900;
+            gap: .5rem;
+            justify-content: center;
+            padding: .9rem 1.6rem;
+            text-decoration: none;
+            text-transform: uppercase;
+            transition: transform .2s ease, background-color .2s ease;
+        }
+
+        .about-button:hover {
+            background: var(--about-primary-dark);
+            color: #ffffff;
+            transform: translateY(-2px);
+        }
+
+        .about-button.is-outline {
+            background: transparent;
+            border: 1px solid rgba(49, 130, 206, .35);
+            color: var(--about-primary-dark);
+        }
+
+        .about-message {
+            background: linear-gradient(135deg, var(--about-primary-dark), var(--about-green));
+            color: var(--about-milk);
+            min-height: 78vh;
+            padding: 7rem 1rem;
+        }
+
+        .about-message-inner,
+        .about-flow-inner,
+        .about-neighborhood-inner,
+        .about-final-inner {
+            margin: 0 auto;
+            max-width: 1180px;
+            width: 100%;
+        }
+
+        .about-big-text {
+            color: rgba(250, 234, 222, .08);
+            font-size: 5rem;
+            font-weight: 700;
+            line-height: .95;
+            margin: 0;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .about-message .about-clip-frame {
+            display: table;
+            margin: 2.5rem auto;
+        }
+
+        .about-message p {
+            color: rgba(250, 234, 222, .78);
+            font-size: 1.05rem;
+            line-height: 1.55;
+            margin: 2rem auto 0;
+            max-width: 560px;
+            text-align: center;
+        }
+
+        .about-flow {
+            background: var(--about-milk);
+            padding: 7rem 1rem;
+        }
+
+        .about-flow-title {
+            color: var(--about-ink);
+            font-size: 5rem;
+            font-weight: 700;
+            line-height: .95;
+            margin: 0 auto 3rem;
+            max-width: 920px;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .about-flow-grid {
+            display: grid;
+            gap: 1.25rem;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .about-card {
             background: #ffffff;
-            border: 1px solid rgba(100, 116, 139, .18);
-            min-height: 320px;
+            border: .25rem solid var(--about-blue-soft);
+            border-radius: 1.25rem;
+            min-height: 260px;
+            padding: 1.5rem;
+            transform: rotate(-2deg);
         }
 
-        .concept-node {
-            border: 1px solid rgba(100, 116, 139, .16);
-            box-shadow: 0 12px 28px rgba(15, 23, 42, .08);
+        .about-card:nth-child(2) {
+            background: var(--about-primary-dark);
+            color: var(--about-milk);
+            transform: rotate(2deg) translateY(1.25rem);
         }
 
-        .concept-step-number {
-            height: 40px;
-            width: 40px;
+        .about-card:nth-child(3) {
+            background: var(--about-warm);
+            transform: rotate(-1deg);
         }
 
-        .concept-pill {
-            background: rgba(49, 130, 206, .1);
-            color: var(--collabis-primary-dark);
+        .about-card-icon {
+            align-items: center;
+            background: rgba(49, 130, 206, .12);
+            border-radius: 50%;
+            color: var(--about-primary);
+            display: flex;
+            font-size: 1.8rem;
+            height: 4rem;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            width: 4rem;
         }
 
-        @media (max-width: 767.98px) {
-            .concept-hero {
-                border-radius: .75rem !important;
+        .about-card h3 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            line-height: .95;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        .about-card p {
+            color: inherit;
+            line-height: 1.5;
+            margin: 0;
+            opacity: .78;
+        }
+
+        .about-neighborhood {
+            background: var(--about-main-bg);
+            color: var(--about-milk);
+            padding: 7rem 1rem;
+        }
+
+        .about-neighborhood-title {
+            font-size: 5.25rem;
+            font-weight: 700;
+            line-height: .95;
+            margin: 0 0 3rem;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .about-tag-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .about-tag {
+            border: 1px solid rgba(250, 234, 222, .24);
+            border-radius: 999px;
+            color: var(--about-milk);
+            font-family: "Inter", sans-serif;
+            font-size: 1rem;
+            font-weight: 800;
+            padding: .9rem 1.25rem;
+            text-decoration: none;
+            transform: rotate(-2deg);
+        }
+
+        .about-tag:nth-child(even) {
+            background: rgba(255, 255, 255, .08);
+            transform: rotate(2deg);
+        }
+
+        .about-final {
+            background: var(--about-milk);
+            padding: 7rem 1rem 8rem;
+            text-align: center;
+        }
+
+        .about-final h2 {
+            color: var(--about-ink);
+            font-size: 5.25rem;
+            font-weight: 700;
+            line-height: .95;
+            margin: 0 auto 1.5rem;
+            max-width: 900px;
+            text-transform: uppercase;
+        }
+
+        .about-final p {
+            color: rgba(31, 41, 55, .78);
+            font-size: 1.08rem;
+            line-height: 1.5;
+            margin: 0 auto 2rem;
+            max-width: 560px;
+        }
+
+        @media (max-width: 991.98px) {
+            .about-title,
+            .about-clip-fill {
+                font-size: 4.35rem;
             }
 
-            .concept-visual {
+            .about-big-text,
+            .about-flow-title,
+            .about-neighborhood-title,
+            .about-final h2 {
+                font-size: 3.75rem;
+            }
+
+            .about-flow-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .about-card,
+            .about-card:nth-child(2),
+            .about-card:nth-child(3) {
                 min-height: auto;
+                transform: rotate(0deg);
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .about-hero,
+            .about-message,
+            .about-flow,
+            .about-neighborhood,
+            .about-final {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+
+            .about-title,
+            .about-clip-fill {
+                font-size: 3.1rem;
+            }
+
+            .about-big-text,
+            .about-flow-title,
+            .about-neighborhood-title,
+            .about-final h2 {
+                font-size: 2.75rem;
+            }
+
+            .about-hero-actions {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            .about-button {
+                width: 100%;
             }
         }
     </style>
 {% endblock %}
 
 {% block body %}
-<div class="container page-shell">
-    <div class="page-header">
-        <div>
-            <p class="page-kicker">Concept</p>
-            <h1 class="fw-bold mb-0">L’entraide étudiante, au bon endroit</h1>
-        </div>
-        <a href="{{ path('app_post_index') }}" class="btn btn-primary rounded-pill px-4">
-            <i class="bi bi-search me-1"></i> Explorer
-        </a>
-    </div>
+<div class="about-spylt">
+    <section class="about-section about-hero">
+        <div class="about-hero-inner">
+            <span class="about-eyebrow">Collabis · plateforme d'entraide locale</span>
 
-    <section class="concept-hero rounded-3 p-4 p-lg-5 shadow-sm mb-4">
-        <div class="row align-items-center g-5">
-            <div class="col-lg-6">
-                <span class="concept-pill d-inline-flex align-items-center rounded-pill px-3 py-2 fw-semibold mb-3">
-                    <i class="bi bi-stars me-2"></i> Plateforme collaborative
-                </span>
-                <h2 class="display-6 fw-bold mb-3">Collabis connecte les étudiants qui ont besoin d’un coup de main avec ceux qui peuvent aider.</h2>
-                <p class="lead text-muted mb-4">Une annonce claire, une prise de contact simple, et des échanges plus fluides pour partager un service, un objet, une compétence ou une opportunité locale.</p>
-                <div class="d-flex flex-column flex-sm-row gap-2">
-                    <a href="{{ path('app_post_new') }}" class="btn btn-primary rounded-pill px-4">
-                        <i class="bi bi-plus-lg me-1"></i> Publier une annonce
-                    </a>
-                    <a href="{{ path('app_post_index') }}" class="btn btn-outline-primary rounded-pill px-4">Voir les annonces</a>
-                </div>
+            <h1 class="about-title js-split-title">
+                <span class="about-title-line">L'union</span>
+                <span class="about-title-line">fait la force</span>
+            </h1>
+
+            <div class="about-clip-frame js-clip-title">
+                <div class="about-clip-fill">entre voisins</div>
             </div>
-            <div class="col-lg-6">
-                <div class="concept-visual rounded-3 p-4 d-flex flex-column justify-content-between shadow-sm">
-                    <div class="d-flex justify-content-between align-items-start gap-3">
-                        <div class="concept-node bg-white rounded-3 p-3">
-                            <i class="bi bi-person-check text-primary fs-3"></i>
-                            <p class="fw-bold mb-0 mt-2">Besoin</p>
-                            <small class="text-muted">Cours, matériel, service</small>
-                        </div>
-                        <div class="concept-node bg-white rounded-3 p-3 mt-4">
-                            <i class="bi bi-chat-dots text-success fs-3"></i>
-                            <p class="fw-bold mb-0 mt-2">Contact</p>
-                            <small class="text-muted">Message direct</small>
-                        </div>
-                    </div>
-                    <div class="text-center py-4">
-                        <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center shadow" style="height: 86px; width: 86px;">
-                            <i class="bi bi-rocket-takeoff fs-1"></i>
-                        </div>
-                        <p class="fw-bold mb-0 mt-3">Un campus plus solidaire</p>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-end gap-3">
-                        <div class="concept-node bg-white rounded-3 p-3 mb-4">
-                            <i class="bi bi-box-seam text-warning fs-3"></i>
-                            <p class="fw-bold mb-0 mt-2">Partage</p>
-                            <small class="text-muted">Objets et ressources</small>
-                        </div>
-                        <div class="concept-node bg-white rounded-3 p-3">
-                            <i class="bi bi-mortarboard text-primary fs-3"></i>
-                            <p class="fw-bold mb-0 mt-2">Compétences</p>
-                            <small class="text-muted">Entraide entre pairs</small>
-                        </div>
-                    </div>
-                </div>
+
+            <p class="about-hero-copy">Collabis révèle les talents proches de vous : un outil à prêter, un service à proposer, un coup de main à demander, une conversation à lancer.</p>
+
+            <div class="about-hero-actions">
+                <a href="{{ path('app_post_index') }}" class="about-button">
+                    <i class="bi bi-search"></i> Explorer les annonces
+                </a>
+                <a href="{{ path('app_post_new') }}" class="about-button is-outline">
+                    <i class="bi bi-plus-lg"></i> Proposer une aide
+                </a>
             </div>
         </div>
     </section>
 
-    <section class="row row-cols-1 row-cols-md-3 g-4 mb-4">
-        <div class="col">
-            <article class="card h-100 border-0 shadow-sm">
-                <div class="card-body p-4">
-                    <div class="concept-step-number bg-primary-subtle text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold mb-3">1</div>
-                    <h2 class="h5 fw-bold">Publier</h2>
-                    <p class="text-muted mb-0">Décrivez ce que vous cherchez ou proposez avec un titre lisible, une description utile et des photos si elles aident à comprendre.</p>
-                </div>
-            </article>
-        </div>
-        <div class="col">
-            <article class="card h-100 border-0 shadow-sm">
-                <div class="card-body p-4">
-                    <div class="concept-step-number bg-success-subtle text-success rounded-circle d-flex align-items-center justify-content-center fw-bold mb-3">2</div>
-                    <h2 class="h5 fw-bold">Découvrir</h2>
-                    <p class="text-muted mb-0">Parcourez les annonces du moment et repérez rapidement les demandes, services ou ressources qui correspondent à votre besoin.</p>
-                </div>
-            </article>
-        </div>
-        <div class="col">
-            <article class="card h-100 border-0 shadow-sm">
-                <div class="card-body p-4">
-                    <div class="concept-step-number bg-warning-subtle text-warning rounded-circle d-flex align-items-center justify-content-center fw-bold mb-3">3</div>
-                    <h2 class="h5 fw-bold">Échanger</h2>
-                    <p class="text-muted mb-0">Lancez une conversation depuis une annonce et organisez la suite directement avec la bonne personne.</p>
-                </div>
-            </article>
+    <section class="about-section about-message">
+        <div class="about-message-inner">
+            <h2 class="about-big-text js-reveal-up">Votre quartier</h2>
+
+            <div class="about-clip-frame is-soft js-clip-title">
+                <div class="about-clip-fill">a du talent</div>
+            </div>
+
+            <h2 class="about-big-text js-reveal-up">il suffit de le connecter</h2>
+            <p>Une annonce devient un lien. Un message devient une rencontre utile. Collabis donne une place claire aux petites entraides qui changent le quotidien.</p>
         </div>
     </section>
 
-    <section class="bg-white border rounded-3 p-4 p-lg-5 shadow-sm">
-        <div class="row align-items-center g-4">
-            <div class="col-lg-7">
-                <p class="page-kicker">Pourquoi Collabis</p>
-                <h2 class="h3 fw-bold mb-3">Moins de bruit, plus de liens utiles.</h2>
-                <p class="text-muted mb-0">Collabis rassemble les petites annonces étudiantes dans un espace simple : assez structuré pour trouver vite, assez humain pour favoriser l’entraide locale.</p>
+    <section class="about-section about-flow">
+        <div class="about-flow-inner">
+            <h2 class="about-flow-title js-reveal-up">Trois gestes simples pour faire circuler l'aide</h2>
+
+            <div class="about-flow-grid">
+                <article class="about-card js-card">
+                    <div class="about-card-icon"><i class="bi bi-megaphone"></i></div>
+                    <h3>Publier</h3>
+                    <p>Décrivez ce que vous cherchez ou proposez avec des mots simples et une intention claire.</p>
+                </article>
+
+                <article class="about-card js-card">
+                    <div class="about-card-icon"><i class="bi bi-chat-dots"></i></div>
+                    <h3>Échanger</h3>
+                    <p>Contactez la bonne personne depuis l'annonce et organisez la suite sans détour.</p>
+                </article>
+
+                <article class="about-card js-card">
+                    <div class="about-card-icon"><i class="bi bi-heart"></i></div>
+                    <h3>Aider</h3>
+                    <p>Transformez une disponibilité, une compétence ou un objet en vraie solution locale.</p>
+                </article>
             </div>
-            <div class="col-lg-5">
-                <div class="row g-3">
-                    <div class="col-6">
-                        <div class="border rounded-3 p-3 h-100">
-                            <i class="bi bi-shield-check text-primary fs-4"></i>
-                            <p class="fw-bold mb-0 mt-2">Clair</p>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="border rounded-3 p-3 h-100">
-                            <i class="bi bi-lightning-charge text-warning fs-4"></i>
-                            <p class="fw-bold mb-0 mt-2">Rapide</p>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="border rounded-3 p-3 h-100">
-                            <i class="bi bi-people text-success fs-4"></i>
-                            <p class="fw-bold mb-0 mt-2">Local</p>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="border rounded-3 p-3 h-100">
-                            <i class="bi bi-heart text-danger fs-4"></i>
-                            <p class="fw-bold mb-0 mt-2">Solidaire</p>
-                        </div>
-                    </div>
-                </div>
+        </div>
+    </section>
+
+    <section class="about-section about-neighborhood">
+        <div class="about-neighborhood-inner">
+            <h2 class="about-neighborhood-title js-reveal-up">Tout ce qui peut circuler</h2>
+
+            <div class="about-clip-frame js-clip-title">
+                <div class="about-clip-fill">près de vous</div>
             </div>
+
+            <div class="about-tag-cloud">
+                <span class="about-tag">Cours particuliers</span>
+                <span class="about-tag">Outils à prêter</span>
+                <span class="about-tag">Services rapides</span>
+                <span class="about-tag">Dépannage</span>
+                <span class="about-tag">Compétences locales</span>
+                <span class="about-tag">Objets utiles</span>
+                <span class="about-tag">Recommandations</span>
+                <span class="about-tag">Solidarité de quartier</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="about-section about-final">
+        <div class="about-final-inner">
+            <h2 class="js-reveal-up">Moins d'isolement, plus de liens utiles.</h2>
+            <p>Collabis ne cherche pas à faire du bruit. La plateforme rend simplement visibles les personnes capables de s'aider autour d'un même lieu.</p>
+            <a href="{{ path('app_post_new') }}" class="about-button">
+                <i class="bi bi-rocket-takeoff"></i> Lancer une annonce
+            </a>
         </div>
     </section>
 </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
+    <script defer>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!window.gsap || !window.ScrollTrigger) {
+                return;
+            }
+
+            gsap.registerPlugin(ScrollTrigger);
+
+            document.querySelectorAll('.js-split-title').forEach((title) => {
+                title.querySelectorAll('.about-title-line').forEach((line) => {
+                    const text = line.textContent;
+                    line.textContent = '';
+
+                    [...text].forEach((char) => {
+                        const span = document.createElement('span');
+                        span.className = 'about-title-char';
+                        span.innerHTML = char === ' ' ? '&nbsp;' : char;
+                        line.appendChild(span);
+                    });
+                });
+            });
+
+            gsap.timeline({ delay: .25 })
+                .from('.about-title-char', {
+                    yPercent: 180,
+                    duration: .8,
+                    ease: 'power3.out',
+                    stagger: .018
+                })
+                .to('.about-hero .js-clip-title', {
+                    clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
+                    duration: .9,
+                    ease: 'circ.out',
+                    opacity: 1
+                }, '-=.45')
+                .from('.about-hero-copy, .about-hero-actions, .about-eyebrow', {
+                    y: 18,
+                    opacity: 0,
+                    duration: .55,
+                    stagger: .08,
+                    ease: 'power2.out'
+                }, '-=.35');
+
+            gsap.to('.about-hero', {
+                rotate: 3,
+                scale: .94,
+                yPercent: 18,
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: '.about-hero',
+                    start: 'top top',
+                    end: 'bottom top',
+                    scrub: true
+                }
+            });
+
+            gsap.utils.toArray('.js-clip-title').filter((element) => !element.closest('.about-hero')).forEach((element) => {
+                gsap.to(element, {
+                    clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
+                    opacity: 1,
+                    duration: .85,
+                    ease: 'circ.out',
+                    scrollTrigger: {
+                        trigger: element,
+                        start: 'top 78%'
+                    }
+                });
+            });
+
+            gsap.utils.toArray('.js-reveal-up').forEach((element) => {
+                gsap.from(element, {
+                    y: 70,
+                    opacity: 0,
+                    duration: .85,
+                    ease: 'power2.out',
+                    scrollTrigger: {
+                        trigger: element,
+                        start: 'top 82%'
+                    }
+                });
+            });
+
+            gsap.from('.js-card', {
+                y: 60,
+                opacity: 0,
+                duration: .75,
+                stagger: .12,
+                ease: 'power2.out',
+                scrollTrigger: {
+                    trigger: '.about-flow-grid',
+                    start: 'top 78%'
+                }
+            });
+
+            gsap.from('.about-tag', {
+                y: 30,
+                opacity: 0,
+                duration: .55,
+                stagger: .05,
+                ease: 'power2.out',
+                scrollTrigger: {
+                    trigger: '.about-tag-cloud',
+                    start: 'top 82%'
+                }
+            });
+        });
+    </script>
 {% endblock %}
