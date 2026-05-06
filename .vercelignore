@@ -1,6 +1,5 @@
 /vendor
 /var/cache
 /var/log
-/.env
 /.env.local
 /node_modules
