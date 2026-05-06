@@ -59,6 +59,8 @@ final class ConversationController extends AbstractController
                 ->setPost($post)
                 ->setSubject($post->getTitle())
                 ->setUserProfile($requester)
+                // ->setInterlocuteur($owner)
+// fix migration)
                 ->setInterlocutor($owner);
 
             $entityManager->persist($conversation);
@@ -126,6 +128,7 @@ final class ConversationController extends AbstractController
     {
         $participantIds = array_filter([
             $conversation->getUserProfile()?->getId(),
+// (fix migration)
             $conversation->getInterlocutor()?->getId(),
         ]);
 
