@@ -1,0 +1,32 @@
+<header class="collabis-shell collabis-topbar">
+    <a href="{{ path('app_home') }}" class="collabis-logo-img" aria-label="Collabis - Accueil">
+        <img src="{{ asset('images/logo_light.png') }}" alt="Collabis">
+    </a>
+
+    <nav class="collabis-actions" aria-label="Navigation principale">
+        <a href="{{ path('app_conversation') }}" class="nav-element nav-icon" aria-label="Messages">
+            <i class="bi bi-chat-dots"></i>
+        </a>
+
+        <a href="{{ path('app_post_new') }}" class="nav-element">
+            <i class="bi bi-plus-circle"></i>
+            <span>Publier</span>
+        </a>
+
+        {% if app.user %}
+            <a href="{{ path('app_my_profile') }}" class="profile-icon profile-image" aria-label="Mon profil">
+                {% if app.user.avatarUrl %}
+                    {% set avatarUrl = app.user.avatarUrl starts with 'http' ? app.user.avatarUrl : asset('uploads/' ~ app.user.avatarUrl) %}
+                    <img src="{{ avatarUrl }}" alt="">
+                {% else %}
+                    <i class="bi bi-person"></i>
+                {% endif %}
+            </a>
+        {% else %}
+            <a href="{{ path('app_login') }}" class="nav-element">Connexion</a>
+            <a href="{{ path('app_register') }}" class="profile-icon" aria-label="Créer un compte">
+                <i class="bi bi-person"></i>
+            </a>
+        {% endif %}
+    </nav>
+</header>
