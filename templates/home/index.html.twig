@@ -27,13 +27,9 @@
                 <div class="col">
                     <div class="card h-100 border-0 shadow-sm transition-hover">
                         
-                        {# --- CORRECTION DE L'IMAGE ICI --- #}
                         {% if post.media|length > 0 %}
-                            {% if 'http' in post.media[0].url %}
-                                <img src="{{ post.media[0].url }}" class="card-img-top rounded-top-3" alt="{{ post.title }}" style="height: 200px; object-fit: cover;">
-                            {% else %}
-                                <img src="{{ asset('uploads/' ~ post.media[0].url) }}" class="card-img-top rounded-top-3" alt="{{ post.title }}" style="height: 200px; object-fit: cover;">
-                            {% endif %}
+                            {% set imageUrl = post.media[0].url starts with 'http' ? post.media[0].url : asset('uploads/' ~ post.media[0].url) %}
+                            <img src="{{ imageUrl }}" class="card-img-top rounded-top-3" alt="{{ post.title }}" style="height: 200px; object-fit: cover;">
                         {% else %}
                             <div class="bg-light text-center py-5 rounded-top-3">
                                 <span class="text-muted">Pas de photo</span>

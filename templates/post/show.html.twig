@@ -20,12 +20,8 @@
                             <div class="carousel-inner">
                                 {% for image in post.media %}
                                     <div class="carousel-item {{ loop.first ? 'active' : '' }}">
-                                        {# --- CORRECTION ICI : GESTION DES URLS EXTERNES --- #}
-                                        {% if 'http' in image.url %}
-                                            <img src="{{ image.url }}" class="d-block w-100 rounded" alt="Photo de l'annonce" style="height: 500px; object-fit: cover;">
-                                        {% else %}
-                                            <img src="{{ asset('uploads/' ~ image.url) }}" class="d-block w-100 rounded" alt="Photo de l'annonce" style="height: 500px; object-fit: cover;">
-                                        {% endif %}
+                                        {% set imageUrl = image.url starts with 'http' ? image.url : asset('uploads/' ~ image.url) %}
+                                        <img src="{{ imageUrl }}" class="d-block w-100 rounded" alt="Photo de l'annonce" style="height: 500px; object-fit: cover;">
                                     </div>
                                 {% endfor %}
                             </div>
