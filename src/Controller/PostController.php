@@ -7,6 +7,7 @@ use App\Entity\Media; // Importation de l'entité Media
 use App\Entity\UserProfile;
 use App\Form\PostType;
 use App\Repository\PostRepository;
+use App\Service\BlobStorage;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,7 +29,7 @@ final class PostController extends AbstractController
 
     #[Route('/new', name: 'app_post_new', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_USER')]
-    public function new(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger, BlobStorage $blobStorage): Response
     {
         $post = new Post();
         $post->setUser($this->getUser());
@@ -48,15 +49,11 @@ final class PostController extends AbstractController
                     $safeFilename = $slugger->slug($originalFilename);
                     $newFilename = $safeFilename.'-'.uniqid().'.'.$imageFile->guessExtension();
 
-                    // On déplace le fichier physiquement dans public/uploads
-                    $imageFile->move(
-                        $this->getParameter('kernel.project_dir') . '/public/uploads',
-                        $newFilename
-                    );
+                    $imageUrl = $blobStorage->uploadPublic($imageFile, 'posts/'.$newFilename);
 
                     // On crée l'enregistrement dans la table Media
                     $media = new Media();
-                    $media->setUrl($newFilename);
+                    $media->setUrl($imageUrl);
                     $media->setPost($post); // On lie l'image au post actuel
                     
                     $entityManager->persist($media);

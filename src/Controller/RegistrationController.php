@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\UserProfile;
 use App\Form\RegistrationFormType;
 use App\Security\AppCustomAuthenticator;
+use App\Service\BlobStorage;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -19,7 +20,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class RegistrationController extends AbstractController
 {
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, Security $security, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
+    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, Security $security, EntityManagerInterface $entityManager, SluggerInterface $slugger, BlobStorage $blobStorage): Response
     {
         $user = new UserProfile();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -41,16 +42,11 @@ class RegistrationController extends AbstractController
                 $newFilename = $safeFilename . '-' . uniqid() . '.' . $avatarFile->guessExtension();
 
                 try {
-                    // On déplace le fichier dans le dossier public/uploads/avatars
-                    $avatarFile->move(
-                        $this->getParameter('avatars_directory'),
-                        $newFilename
-                    );
+                    $avatarUrl = $blobStorage->uploadPublic($avatarFile, 'avatars/'.$newFilename);
+                    $user->setAvatarUrl($avatarUrl);
                 } catch (FileException $e) {
                     // Ici on pourrait gérer l'erreur si l'upload échoue
                 }
-
-                $user->setAvatarUrl($newFilename);
             }
 
             // encode the plain password
