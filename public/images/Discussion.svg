@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="message" xmlns="http://www.w3.org/2000/svg" width="124.54mm" height="94.9mm" viewBox="0 0 353.02 269.02">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+        stroke: #e9521d;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 2px;
+      }
+    </style>
+  </defs>
+  <path class="cls-1" d="M195.17,144.63c-10.75.08-21.5.16-32.24.24-1.69,1.73-3.39,3.46-5.08,5.19v-31.1h37.32v25.67Z"/>
+</svg>

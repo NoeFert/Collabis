@@ -4,153 +4,113 @@
 
 {% block stylesheets %}
     <style>
-        .auth-shell {
-            padding-bottom: 3rem;
-            padding-top: 3rem;
+        :root {
+            --collabis-orange: #FE4F02;
+            --collabis-brown: #3B1A09;
+            --collabis-sand: #FFE8B4;
         }
+
+        .auth-shell { padding: 3rem 0; }
 
         .auth-card {
             animation: authEnter .28s ease-out;
             background: #ffffff;
-            border: 1px solid rgba(100, 116, 139, .16);
-            border-radius: 1.5rem;
-            box-shadow: 0 24px 70px rgba(15, 23, 42, .14);
-            min-height: 620px;
+            border: none;
+            border-radius: 2.5rem;
+            box-shadow: 0 24px 70px rgba(59, 26, 9, 0.1);
+            min-height: 650px;
             overflow: hidden;
         }
 
-        .auth-form-panel,
-        .auth-side-panel {
-            min-height: 620px;
-        }
-
-        .auth-form-panel {
-            padding: 2.5rem;
-        }
-
-        .auth-side-panel {
-            background: linear-gradient(135deg, #1f9d7a, var(--collabis-primary));
-            color: #ffffff;
-            overflow: hidden;
-            padding: 2.5rem;
-            position: relative;
-        }
-
-        .auth-side-panel::before {
-            background-image: radial-gradient(rgba(255, 255, 255, .24) 1px, transparent 1px);
-            background-size: 20px 20px;
-            content: "";
-            inset: 0;
-            opacity: .65;
-            position: absolute;
-        }
-
-        .auth-side-panel > * {
-            position: relative;
-            z-index: 1;
-        }
-
-        .auth-floating-card {
-            background: rgba(255, 255, 255, .16);
-            border: 1px solid rgba(255, 255, 255, .28);
-            backdrop-filter: blur(10px);
-        }
-
-        .auth-icon-btn {
-            height: 42px;
-            width: 42px;
-        }
-
+        /* --- PANNEAU GAUCHE (FORMULAIRE) --- */
+        .auth-form-panel { padding: 3rem; background: #fff; }
+        
         .auth-input {
-            background-color: #f1f5f9;
-            border: 1px solid transparent;
-            border-radius: .75rem;
+            background-color: #f8f9fa;
+            border: 2px solid transparent;
+            border-radius: 1rem;
             padding: .85rem 1rem;
+            transition: all 0.2s;
         }
 
         .auth-input:focus {
             background-color: #ffffff;
-            border-color: rgba(49, 130, 206, .45);
-            box-shadow: 0 0 0 .25rem rgba(49, 130, 206, .12);
+            border-color: var(--collabis-orange);
+            box-shadow: 0 0 0 .25rem rgba(254, 79, 2, 0.1);
         }
 
         .auth-switch {
             background: #f1f5f9;
             border-radius: 999px;
-            padding: .25rem;
+            padding: .3rem;
         }
 
         .auth-switch a {
             border-radius: 999px;
-            color: var(--collabis-muted);
+            color: #64748b;
             font-weight: 700;
             padding: .6rem 1rem;
             text-align: center;
             text-decoration: none;
-            transition: all .2s ease;
             width: 50%;
         }
 
         .auth-switch a.active {
-            background: #ffffff;
-            box-shadow: 0 8px 20px rgba(15, 23, 42, .08);
-            color: var(--collabis-primary);
+            background: var(--collabis-orange);
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(254, 79, 2, 0.2);
         }
 
-        .auth-terms {
-            background: #f8fafc;
-            border: 1px solid rgba(49, 130, 206, .18);
-            border-radius: .9rem;
-            padding: 1rem;
+        .btn-collabis {
+            background: var(--collabis-orange);
+            color: white;
+            border: none;
+            border-radius: 999px;
+            padding: 0.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: transform 0.2s;
+        }
+        .btn-collabis:hover { transform: scale(1.02); color: white; opacity: 0.9; }
+
+        /* --- PANNEAU DROITE (BANNIÈRE) --- */
+        .auth-side-panel {
+            background: var(--collabis-sand);
+            color: var(--collabis-brown);
+            padding: 3rem;
+            height: 100%;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
         }
 
-        .auth-terms .form-check-input {
-            border-color: rgba(49, 130, 206, .45);
-            height: 1.1rem;
-            margin-top: .2rem;
-            width: 1.1rem;
+        .sticker-img {
+            max-width: 80%;
+            height: auto;
+            margin-top: 2rem;
+            filter: drop-shadow(0 10px 15px rgba(59, 26, 9, 0.1));
+            animation: float 4s ease-in-out infinite;
         }
 
-        .auth-terms .form-check-input:checked {
-            background-color: var(--collabis-primary);
-            border-color: var(--collabis-primary);
-        }
-
-        .auth-terms .invalid-feedback,
-        .auth-terms .form-error-message {
-            display: block;
-            margin-left: 1.75rem;
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
         }
 
         @keyframes authEnter {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        @media (max-width: 991.98px) {
-            .auth-card,
-            .auth-form-panel,
-            .auth-side-panel {
-                min-height: auto;
-            }
-
-            .auth-side-panel {
-                border-radius: 0 0 1.5rem 1.5rem;
-            }
-        }
-
-        @media (max-width: 575.98px) {
-            .auth-form-panel,
-            .auth-side-panel {
-                padding: 1.5rem;
-            }
+        .auth-terms {
+            background: #fff9f0;
+            border: 1px solid var(--collabis-orange);
+            border-radius: 1rem;
+            padding: 1rem;
         }
     </style>
 {% endblock %}
@@ -162,9 +122,8 @@
             <div class="col-lg-6">
                 <div class="auth-form-panel d-flex flex-column justify-content-center">
                     <div class="mb-4">
-                        <p class="page-kicker">Inscription</p>
-                        <h1 class="fw-bold mb-2">Créer un compte</h1>
-                        <p class="text-muted mb-0">Rejoignez Collabis et commencez à partager services, ressources et coups de main.</p>
+                        <h1 class="fw-bold mb-2" style="font-family: 'Antonio', sans-serif; color: var(--collabis-brown); font-size: 2.5rem;">CRÉER UN COMPTE</h1>
+                        <p class="text-muted mb-0">Rejoignez Collabis et commencez à partager.</p>
                     </div>
 
                     <div class="auth-switch d-flex mb-4">
@@ -172,109 +131,59 @@
                         <a href="{{ path('app_register') }}" class="active">Inscription</a>
                     </div>
 
-                    <div class="d-flex gap-2 mb-4" aria-label="Inscriptions rapides">
-                        <button type="button" class="btn btn-light border rounded-circle auth-icon-btn" title="Google" aria-label="Google">
-                            <i class="bi bi-google"></i>
-                        </button>
-                        <button type="button" class="btn btn-light border rounded-circle auth-icon-btn" title="GitHub" aria-label="GitHub">
-                            <i class="bi bi-github"></i>
-                        </button>
-                        <button type="button" class="btn btn-light border rounded-circle auth-icon-btn" title="LinkedIn" aria-label="LinkedIn">
-                            <i class="bi bi-linkedin"></i>
-                        </button>
-                    </div>
-
-                    {{ form_errors(registrationForm) }}
-
                     {{ form_start(registrationForm, {'attr': {'class': 'vstack gap-3'}}) }}
                         {{ form_row(registrationForm.username, {
                             'label': 'Nom d’utilisateur',
-                            'attr': {
-                                'class': 'form-control auth-input',
-                                'placeholder': 'Ex. Lina, Maxime...'
-                            }
+                            'attr': {'class': 'form-control auth-input', 'placeholder': 'Ex. Lina, Maxime...'}
                         }) }}
 
                         {{ form_row(registrationForm.email, {
                             'label': 'Adresse email',
-                            'attr': {
-                                'class': 'form-control auth-input',
-                                'placeholder': 'vous@collabis.ch',
-                                'autocomplete': 'email'
-                            }
+                            'attr': {'class': 'form-control auth-input', 'placeholder': 'vous@collabis.ch'}
                         }) }}
 
                         {{ form_row(registrationForm.plainPassword, {
                             'label': 'Mot de passe',
-                            'attr': {
-                                'class': 'form-control auth-input',
-                                'placeholder': 'Au moins 6 caractères'
-                            }
+                            'attr': {'class': 'form-control auth-input', 'placeholder': 'Au moins 6 caractères'}
                         }) }}
 
                         {{ form_row(registrationForm.avatar, {
-                            'attr': {
-                                'class': 'form-control auth-input'
-                            },
-                            'help': 'Optionnel. JPG, PNG ou WEBP, jusqu’à 2 Mo.'
+                            'attr': {'class': 'form-control auth-input'},
+                            'help': 'Optionnel. Ajoutez votre plus beau sourire !'
                         }) }}
 
-                        <div class="auth-terms">
+                        <div class="auth-terms mt-2">
                             <div class="form-check mb-0">
-                                {{ form_widget(registrationForm.agreeTerms, {
-                                    'attr': {
-                                        'class': 'form-check-input'
-                                    }
-                                }) }}
-                                {{ form_label(registrationForm.agreeTerms, 'J’accepte les conditions d’utilisation de Collabis.', {
-                                    'label_attr': {
-                                        'class': 'form-check-label fw-semibold'
-                                    }
+                                {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'form-check-input'}}) }}
+                                {{ form_label(registrationForm.agreeTerms, 'J’accepte les conditions d’utilisation.', {
+                                    'label_attr': {'class': 'form-check-label fw-bold', 'style': 'color: var(--collabis-brown); font-size: 0.9rem;'}
                                 }) }}
                             </div>
-                            <p class="text-muted small mb-0 mt-2 ms-4">Obligatoire pour créer votre compte et utiliser la plateforme.</p>
                             {{ form_errors(registrationForm.agreeTerms) }}
                         </div>
 
-                        <button type="submit" class="btn btn-primary btn-lg rounded-pill mt-2">
-                            <i class="bi bi-person-plus me-1"></i> S’inscrire
+                        <button type="submit" class="btn btn-collabis btn-lg mt-3">
+                            S’inscrire sur Collabis
                         </button>
                     {{ form_end(registrationForm) }}
                 </div>
             </div>
 
-            <div class="col-lg-6">
-                <aside class="auth-side-panel d-flex flex-column justify-content-between">
-                    <div>
-                        <a class="d-inline-flex align-items-center text-white text-decoration-none fw-bold fs-4 mb-5" href="{{ path('app_home') }}">
-                            <i class="bi bi-rocket-takeoff-fill me-2"></i> COLLABIS
-                        </a>
-                        <h2 class="display-6 fw-bold mb-3">Bienvenue dans l’espace d’entraide.</h2>
-                        <p class="mb-4 opacity-75">Créez votre profil pour publier, répondre aux annonces et échanger avec les autres étudiants.</p>
-                        <a href="{{ path('app_login') }}" class="btn btn-outline-light rounded-pill px-4">
-                            Déjà inscrit ? Se connecter
-                        </a>
+            <div class="col-lg-6 d-none d-lg-block">
+                <aside class="auth-side-panel">
+                    <div style="z-index: 2;">
+                        <h2 class="display-5 fw-bold mb-3" style="font-family: 'Antonio', sans-serif; text-transform: uppercase;">
+                            PRÊTEZ UNE MAIN,<br>TROUVEZ UNE SOLUTION.
+                        </h2>
+                        <p class="fs-5 opacity-75">Collabis est la plateforme d'entraide où chaque coup de main compte.</p>
+                        
+                        {# TON IMAGE ICI #}
+                        <img src="{{ asset('images/STICKER_MAIN.svg') }}" alt="Entraide" class="sticker-img">
                     </div>
 
-                    <div class="auth-floating-card rounded-3 p-4 mt-5">
-                        <div class="d-flex align-items-center gap-3 mb-3">
-                            <div class="bg-white text-primary rounded-circle d-flex align-items-center justify-content-center" style="height: 44px; width: 44px;">
-                                <i class="bi bi-megaphone fs-4"></i>
-                            </div>
-                            <div>
-                                <p class="fw-bold mb-0">Publiez en quelques minutes</p>
-                                <small class="opacity-75">Un titre, une description, et votre annonce est prête.</small>
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="bg-white text-success rounded-circle d-flex align-items-center justify-content-center" style="height: 44px; width: 44px;">
-                                <i class="bi bi-person-heart fs-4"></i>
-                            </div>
-                            <div>
-                                <p class="fw-bold mb-0">Un profil identifiable</p>
-                                <small class="opacity-75">Ajoutez un pseudo et une photo si vous le souhaitez.</small>
-                            </div>
-                        </div>
+                    {# Texte de marque en bas #}
+                    <div style="position: absolute; bottom: 30px; font-family: 'Antonio', sans-serif; color: var(--collabis-orange); letter-spacing: 3px; font-weight: bold;">
+                        COLLABIS.CH
                     </div>
                 </aside>
             </div>

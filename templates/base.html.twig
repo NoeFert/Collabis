@@ -1,201 +1,311 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{% block title %}Collabis - Plateforme d'entraide{% endblock %}</title>
-        <link rel="shortcut icon" href="data:image/x-icon;base64,..." />
-
-        <!-- --- STYLES --- -->
-        <!-- Bootstrap 5 -->
+        
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-        <!-- Bootstrap Icons (Pour les petites icônes sympa) -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-        <!-- Google Fonts -->
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Antonio:wght@700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
 
         <style>
             :root {
-                --collabis-primary: #3182ce;
-                --collabis-primary-dark: #2b6cb0;
-                --collabis-ink: #1f2937;
-                --collabis-muted: #64748b;
-                --collabis-surface: #ffffff;
+                --collabis-orange: #FE4F02;
+                --collabis-brown: #3B1A09;
+                --collabis-sand: #FFE8B4;
+                --collabis-white: #FFFFFF;
             }
 
             body {
                 font-family: 'Inter', sans-serif;
-                background-color: #f8f9fa;
-                color: var(--collabis-ink);
+                background-color: var(--collabis-sand);
+                color: var(--collabis-brown);
+                margin: 0;
             }
-            .navbar {
-                transition: all 0.3s ease;
+
+            /* --- HEADER & NAVBAR --- */
+            .header-container {
+                padding-top: 1.5rem;
             }
-            .navbar-brand {
-                letter-spacing: 0;
+
+            .logo-brand img {
+                height: 45px; /* Tu peux ajuster la hauteur ici */
+                width: auto;
             }
-            .nav-link {
-                color: #4a5568 !important;
-                transition: color 0.2s ease;
-            }
-            .nav-link:hover,
-            .nav-link.active {
-                color: var(--collabis-primary) !important;
-            }
-            .nav-link.active {
-                font-weight: 700 !important;
-            }
-            .btn-primary {
-                background-color: var(--collabis-primary);
-                border: none;
-            }
-            .btn-primary:hover {
-                background-color: var(--collabis-primary-dark);
-            }
-            .app-main {
-                min-height: calc(100vh - 180px);
-            }
-            .page-shell {
-                padding-top: 3rem;
-                padding-bottom: 3rem;
-            }
-            .page-header {
+
+            .top-actions {
                 display: flex;
                 align-items: center;
-                justify-content: space-between;
-                gap: 1rem;
-                margin-bottom: 1.5rem;
-            }
-            .page-kicker {
-                color: var(--collabis-muted);
-                font-size: .95rem;
-                margin-bottom: .35rem;
-            }
-            .card {
-                border-radius: .5rem;
-            }
-            .dropdown-item.active,
-            .dropdown-item:active {
-                background-color: var(--collabis-primary);
-            }
-            @media (max-width: 991.98px) {
-                .navbar-actions {
-                    align-items: stretch !important;
-                    gap: .75rem !important;
-                    padding-top: 1rem;
-                }
-                .navbar-actions > .btn,
-                .navbar-actions > a.btn {
-                    width: 100%;
-                }
+                gap: 1.5rem;
             }
 
+            /* --- BARRE RECHERCHE + FILTRES CENTRÉS HORIZONTALEMENT --- */
+            .search-filter-row {
+                margin-top: 2rem;
+                display: flex;
+                align-items: center;
+                justify-content: center; /* Centre la recherche et les filtres */
+                gap: 1.5rem;
+            }
+
+            .search-wrapper {
+                flex: 0 1 350px;
+            }
+
+            .search-bar {
+                background-color: transparent;
+                border: 2.5px solid var(--collabis-orange);
+                border-radius: 999px;
+                padding: 0.4rem 1.2rem;
+                width: 100%;
+                color: var(--collabis-brown);
+                outline: none;
+            }
+
+            .search-bar::placeholder {
+                color: var(--collabis-brown);
+                opacity: 0.6;
+            }
+
+            .filters-group {
+                display: flex;
+                gap: 0.5rem;
+                align-items: center;
+            }
+
+            .filter-btn {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                min-width: 90px;
+                padding: 0.45rem 1rem;
+                border-radius: 999px;
+                border: 1.5px solid var(--collabis-orange);
+                background-color: transparent;
+                color: var(--collabis-orange);
+                text-transform: uppercase;
+                font-weight: 700;
+                transition: 0.2s ease;
+            }
+
+            .filter-btn.active,
+            .filter-btn:hover {
+                background-color: var(--collabis-orange);
+                color: white;
+            }
+
+            .search-wrapper {
+                flex: 1 1 320px;
+                max-width: 420px;
+            }
+
+            .search-bar {
+                width: 100%;
+                border: 2px solid var(--collabis-orange);
+                border-radius: 999px;
+                padding: 0.65rem 1.2rem;
+                font-size: 0.95rem;
+            }
+
+            /* --- BOUTONS & ICONES --- */
+            .filter-btn {
+                background-color: transparent;
+                border: 1.5px solid var(--collabis-orange);
+                color: var(--collabis-orange);
+                border-radius: 999px;
+                font-size: 0.75rem;
+                padding: 0.3rem 1.2rem;
+                text-transform: uppercase;
+                font-weight: 700;
+                transition: 0.2s;
+            }
+
+            .filter-btn:hover {
+                background-color: var(--collabis-orange);
+                color: white;
+            }
+
+            .btn-publier {
+                color: var(--collabis-orange) !important;
+                border: 2px solid var(--collabis-orange) !important;
+                border-radius: 999px;
+                font-weight: 700;
+                padding: 0.4rem 1.2rem;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                text-decoration: none;
+                transition: 0.2s;
+            }
+
+            .btn-publier:hover {
+                background-color: var(--collabis-orange) !important;
+                color: white !important;
+            }
+
+            .nav-icon {
+                color: var(--collabis-orange);
+                font-size: 1.8rem;
+                text-decoration: none;
+            }
+
+            .app-main {
+                margin-top: 3rem;
+                min-height: 70vh;
+            }
+
+            h1, h2, h3 {
+                font-family: 'Antonio', sans-serif !important;
+                text-transform: uppercase;
+            }
+
+            /* --- BOUTONS PERSONNALISÉS COLLABIS --- */
+            .btn-collabis {
+                background-color: var(--collabis-orange);
+                color: white;
+                border: none;
+                text-decoration: none;
+                transition: all 0.2s;
+            }
+
+            .btn-collabis:hover {
+                background-color: #d63b00;
+                color: white;
+                text-decoration: none;
+            }
+
+            .btn-collabis-outline {
+                background-color: transparent;
+                color: var(--collabis-orange);
+                border: 2px solid var(--collabis-orange);
+                text-decoration: none;
+                transition: all 0.2s;
+            }
+
+            .btn-collabis-outline:hover {
+                background-color: var(--collabis-orange);
+                color: white;
+                text-decoration: none;
+            }
+
+            /* Override Bootstrap button colors to orange */
+            .btn-primary,
+            .btn-secondary,
+            .btn-outline-secondary,
+            .btn-outline-primary {
+                border-color: var(--collabis-orange);
+                color: var(--collabis-orange);
+            }
+
+            .btn-primary,
+            .btn-secondary {
+                background-color: var(--collabis-orange);
+                color: white;
+            }
+
+            .btn-outline-secondary,
+            .btn-outline-primary {
+                background-color: transparent;
+                color: var(--collabis-orange);
+            }
+
+            .btn-primary:hover,
+            .btn-secondary:hover,
+            .btn-outline-secondary:hover,
+            .btn-outline-primary:hover {
+                background-color: var(--collabis-orange);
+                color: white;
+                border-color: var(--collabis-orange);
+            }
+
+            /* --- AVATARS --- */
+            .avatar-placeholder {
+                background-color: var(--collabis-orange);
+                color: white;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: bold;
+                border-radius: 9999px;
+            }
+
+            /* --- BADGES --- */
+            .badge-collabis,
+            .badge-category {
+                background-color: var(--collabis-orange);
+                color: white;
+            }
+
+            .badge-offre,
+            .badge-type.badge-offre {
+                background-color: #0a6245;
+                color: white;
+            }
+
+            .badge-demande,
+            .badge-type.badge-demande {
+                background-color: var(--collabis-brown);
+                color: white;
+            }
+
+            .badge-category {
+                border: 1px solid rgba(255, 79, 2, .18);
+                background-color: rgba(254, 79, 2, .12);
+                color: var(--collabis-brown);
+            }
+
+            /* --- BACKGROUNDS --- */
+            .bg-collabis {
+                background-color: var(--collabis-orange);
+            }
         </style>
 
-        {% block stylesheets %}
-        {% endblock %}
-
-        <!-- --- JAVASCRIPT --- -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
-        {% block javascripts %}
-        {% endblock %}
+        {% block stylesheets %}{% endblock %}
     </head>
     <body>
         
-        <!-- --- NAVBAR MODERNE --- -->
-        {% set current_route = app.request.attributes.get('_route') %}
-
-        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top py-3">
-            <div class="container">
-                <!-- Logo -->
-                <a class="navbar-brand fw-bold fs-4 text-primary" href="{{ path('app_home') }}">
-                    <i class="bi bi-rocket-takeoff-fill me-2"></i>COLLABIS
+        <header class="header-container container">
+            <div class="d-flex justify-content-between align-items-center">
+                <a href="{{ path('app_home') }}" class="logo-brand">
+                    <img src="{{ asset('images/logo_sombre.png') }}" alt="Collabis Logo">
                 </a>
 
-                <!-- Bouton Mobile -->
-                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <!-- Liens Centraux -->
-                    <ul class="navbar-nav mx-auto">
-                        <li class="nav-item">
-                            <a class="nav-link px-3 fw-medium {{ current_route == 'app_home' ? 'active' : '' }}" href="{{ path('app_home') }}">Accueil</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link px-3 fw-medium {{ current_route starts with 'app_post_' ? 'active' : '' }}" href="{{ path('app_post_index') }}">Explorer</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link px-3 fw-medium {{ current_route == 'app_about' ? 'active' : '' }}" href="{{ path('app_about') }}">Concept</a>
-                        </li>
-                    </ul>
-
-                    <!-- Partie Droite (Actions) -->
-                    <div class="navbar-actions d-flex align-items-center gap-3">
-                        {% if app.user %}
-                            <!-- Icône Message -->
-                            <a href="{{ path('app_conversation') }}" class="btn {{ current_route starts with 'app_conversation' ? 'btn-primary' : 'btn-light' }} rounded-circle position-relative p-2" title="Messages" aria-label="Messages">
-                                <i class="bi bi-chat-dots fs-5"></i>
-                            </a>
-
-                            <!-- Menu Profil Déroulant -->
-                            <div class="dropdown">
-                                <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" data-bs-toggle="dropdown">
-                                    {% if app.user.avatarUrl %}
-                                        {% set avatarUrl = app.user.avatarUrl starts with 'http' ? app.user.avatarUrl : asset('uploads/' ~ app.user.avatarUrl) %}
-                                        <img src="{{ avatarUrl }}" alt="Avatar de {{ app.user.email }}" class="rounded-circle object-fit-cover shadow-sm" style="width: 40px; height: 40px;">
-                                    {% else %}
-                                        <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center fw-bold shadow-sm" style="width: 40px; height: 40px;">
-                                            {{ app.user.email|slice(0, 1)|upper }}
-                                        </div>
-                                    {% endif %}
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-3">
-                                    <li><h6 class="dropdown-header text-muted">Connecté en tant que : <br><small class="text-primary">{{ app.user.email }}</small></h6></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item py-2 {{ current_route == 'app_my_profile' ? 'active' : '' }}" href="{{ path('app_my_profile') }}"><i class="bi bi-person me-2"></i>Mon profil</a></li>
-                                    <li><a class="dropdown-item py-2 {{ current_route == 'app_conversation' ? 'active' : '' }}" href="{{ path('app_conversation') }}"><i class="bi bi-chat-dots me-2"></i>Messages</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item py-2 text-danger" href="{{ path('app_logout') }}"><i class="bi bi-box-arrow-right me-2"></i>Déconnexion</a></li>
-                                </ul>
-                            </div>
-                        {% else %}
-                            <a href="{{ path('app_login') }}" class="btn btn-link text-decoration-none text-dark fw-medium">Connexion</a>
-                            <a href="{{ path('app_register') }}" class="btn btn-dark rounded-pill px-4 shadow-sm">Rejoindre</a>
-                        {% endif %}
-
-                        <!-- Bouton Publier toujours visible -->
-                        <a href="{{ path('app_post_new') }}" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm {{ current_route == 'app_post_new' ? 'active' : '' }}">
-                            <i class="bi bi-plus-lg me-1"></i> Publier
-                        </a>
-                    </div>
+                <div class="top-actions">
+                    <a href="{{ path('app_conversation') }}" class="nav-icon" title="Messages">
+                        <i class="bi bi-chat-left-text"></i>
+                    </a>
+                    <a href="{{ path('app_post_new') }}" class="btn-publier">
+                        <i class="bi bi-plus-circle-fill"></i> Publier
+                    </a>
+                    <a href="{{ path('app_my_profile') }}" class="nav-icon" title="Mon Profil">
+                        <i class="bi bi-person-circle"></i>
+                    </a>
                 </div>
             </div>
-        </nav>
 
-        <!-- --- CONTENU PRINCIPAL --- -->
-        <main class="app-main">
-            {% for label, messages in app.flashes %}
-                <div class="container mt-3">
-                    {% for message in messages %}
-                        <div class="alert alert-{{ label == 'error' ? 'danger' : label }} alert-dismissible fade show" role="alert">
-                            {{ message }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
-                        </div>
-                    {% endfor %}
+            <div class="search-filter-row d-none d-md-flex">
+                <form action="{{ path('app_post_index') }}" method="get" class="search-wrapper">
+                    <input type="hidden" name="offer" value="{{ app.request.get('offer') }}">
+                    <input type="text" name="q" class="search-bar" placeholder="Recherche" value="{{ app.request.get('q') }}">
+                </form>
+                
+                <div class="filters-group">
+                    <a href="{{ path('app_post_index', {'offer': 'offre'}) }}" class="filter-btn{{ app.request.get('offer') == 'offre' ? ' active' : '' }}">Offre</a>
+                    <a href="{{ path('app_post_index', {'offer': 'demande'}) }}" class="filter-btn{{ app.request.get('offer') == 'demande' ? ' active' : '' }}">Demande</a>
                 </div>
-            {% endfor %}
+            </div>
+        </header>
 
+        <main class="app-main container">
             {% block body %}{% endblock %}
         </main>
 
-        <!-- --- FOOTER SIMPLE --- -->
-        <footer class="bg-white border-top py-4 mt-5">
-            <div class="container text-center">
-                <p class="text-muted mb-0">&copy; {{ "now"|date("Y") }} Collabis - Plateforme étudiante. Tous droits réservés.</p>
-            </div>
+        <footer class="py-5 text-center mt-auto">
+            <p class="text-muted small">© {{ "now"|date("Y") }} Collabis.ch — Plateforme d'entraide locale</p>
         </footer>
 
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
+        {% block javascripts %}{% endblock %}
     </body>
 </html>

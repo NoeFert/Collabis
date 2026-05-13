@@ -15,14 +15,18 @@
             {% set avatarUrl = user.avatarUrl starts with 'http' ? user.avatarUrl : asset('uploads/' ~ user.avatarUrl) %}
             <img src="{{ avatarUrl }}" alt="Avatar de {{ user.username }}" class="rounded-circle object-fit-cover" style="width: 72px; height: 72px;">
         {% else %}
-            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width: 72px; height: 72px;">
+            <div class="avatar-placeholder" style="width: 72px; height: 72px;">
                 {{ user.username|slice(0, 1)|upper }}
             </div>
         {% endif %}
         <div>
             <p class="page-kicker mb-1">Profil public</p>
             <h1 class="fw-bold mb-1">{{ user.username }}</h1>
-            <p class="text-muted mb-0">Membre Collabis</p>
+            {% if user.bio %}
+                <p class="text-muted mb-0">{{ user.bio|nl2br }}</p>
+            {% else %}
+                <p class="text-muted mb-0">Membre Collabis</p>
+            {% endif %}
         </div>
     </div>
 </div>

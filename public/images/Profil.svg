@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="profil" xmlns="http://www.w3.org/2000/svg" width="124.54mm" height="94.9mm" viewBox="0 0 353.02 269.02">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke: #e9521d;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 2px;
+      }
+    </style>
+  </defs>
+  <circle class="cls-1" cx="176.51" cy="134.51" r="28.27"/>
+  <circle class="cls-1" cx="176.51" cy="130.02" r="11.3"/>
+  <path class="cls-1" d="M157.86,155.07c2.57-8.24,10.28-13.84,18.85-13.76,8.43.09,15.92,5.66,18.44,13.76"/>
+</svg>

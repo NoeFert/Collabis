@@ -22,6 +22,12 @@ class Post
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $location = null;
+
+    #[ORM\Column(length: 20, options: ['default' => 'demande'])]
+    private ?string $offer_type = 'demande';
+
     #[ORM\ManyToOne(inversedBy: 'posts')]
     #[ORM\JoinColumn(nullable: false)]
     private ?UserProfile $user = null;
@@ -69,6 +75,30 @@ class Post
     public function setDescription(?string $description): static
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getLocation(): ?string
+    {
+        return $this->location;
+    }
+
+    public function setLocation(?string $location): static
+    {
+        $this->location = $location;
+
+        return $this;
+    }
+
+    public function getOfferType(): ?string
+    {
+        return $this->offer_type;
+    }
+
+    public function setOfferType(string $offer_type): static
+    {
+        $this->offer_type = $offer_type;
 
         return $this;
     }

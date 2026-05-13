@@ -5,28 +5,40 @@
 {% block body %}
 {% set user = app.user %}
 <div class="container page-shell">
-    <div class="page-header">
+    <div class="page-header mb-5">
         <div>
             <p class="page-kicker">Compte</p>
             <h1 class="fw-bold mb-0">Mon profil</h1>
         </div>
-        <a href="{{ path('app_post_new') }}" class="btn btn-primary rounded-pill px-4">
+        <a href="{{ path('app_post_new') }}" class="btn btn-collabis rounded-pill px-4">
             <i class="bi bi-plus-lg me-1"></i> Publier
         </a>
     </div>
 
-    <div class="bg-white border rounded-3 p-4 shadow-sm d-flex align-items-center gap-3">
+    <div class="bg-white border rounded-3 p-4 shadow-sm d-flex align-items-center gap-3 mb-5">
         {% if user.avatarUrl %}
             {% set avatarUrl = user.avatarUrl starts with 'http' ? user.avatarUrl : asset('uploads/' ~ user.avatarUrl) %}
             <img src="{{ avatarUrl }}" alt="Avatar de {{ user.email }}" class="rounded-circle object-fit-cover" style="width: 64px; height: 64px;">
         {% else %}
-            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width: 64px; height: 64px;">
+            <div class="avatar-placeholder" style="width: 64px; height: 64px;">
                 {{ user.email|slice(0, 1)|upper }}
             </div>
         {% endif %}
-        <div>
+        <div class="flex-grow-1">
             <h2 class="h4 fw-bold mb-1">{{ user.email }}</h2>
-            <p class="text-muted mb-0">Retrouvez vos messages et vos annonces depuis la navigation principale.</p>
+            {% if user.bio %}
+                <p class="text-muted mb-0">{{ user.bio|nl2br }}</p>
+            {% else %}
+                <p class="text-muted mb-0">Retrouvez vos messages et vos annonces depuis la navigation principale.</p>
+            {% endif %}
+        </div>
+        <div class="d-flex gap-2 flex-shrink-0">
+            <a href="{{ path('app_edit_profile') }}" class="btn btn-collabis-outline rounded-circle" title="Modifier le profil" style="width: 48px; height: 48px; display: flex; align-items: center; justify-content: center;">
+                <i class="bi bi-pencil"></i>
+            </a>
+            <a href="{{ path('app_logout') }}" class="btn btn-outline-danger rounded-circle" title="Déconnexion" style="width: 48px; height: 48px; display: flex; align-items: center; justify-content: center;">
+                <i class="bi bi-box-arrow-right"></i>
+            </a>
         </div>
     </div>
 
@@ -36,7 +48,7 @@
                 <p class="page-kicker mb-1">Annonces</p>
                 <h2 class="h3 fw-bold mb-0">Mes annonces</h2>
             </div>
-            <a href="{{ path('app_post_new') }}" class="btn btn-outline-primary rounded-pill px-4 align-self-start align-self-md-center">
+            <a href="{{ path('app_post_new') }}" class="btn btn-collabis-outline rounded-pill px-4 align-self-start align-self-md-center">
                 <i class="bi bi-plus-lg me-1"></i> Nouvelle annonce
             </a>
         </div>
@@ -60,7 +72,7 @@
                             {% if post.categories|length > 0 %}
                                 <div class="d-flex flex-wrap gap-2 mb-3">
                                     {% for category in post.categories %}
-                                        <span class="badge bg-primary-subtle text-primary rounded-pill px-3 py-2">{{ category.label }}</span>
+                                        <span class="badge badge-collabis rounded-pill px-3 py-2">{{ category.label }}</span>
                                     {% endfor %}
                                 </div>
                             {% endif %}
@@ -70,7 +82,7 @@
                             </p>
 
                             <div class="d-flex gap-2">
-                                <a href="{{ path('app_post_show', {'id': post.id}) }}" class="btn btn-outline-primary rounded-pill flex-grow-1">Voir</a>
+                                <a href="{{ path('app_post_show', {'id': post.id}) }}" class="btn btn-collabis-outline rounded-pill flex-grow-1">Voir</a>
                                 <a href="{{ path('app_post_edit', {'id': post.id}) }}" class="btn btn-light rounded-circle" title="Modifier">
                                     <i class="bi bi-pencil"></i>
                                 </a>
@@ -83,7 +95,7 @@
                     <div class="text-center bg-white border rounded-3 py-5 px-4">
                         <h3 class="h4 fw-bold">Vous n’avez pas encore publié d’annonce</h3>
                         <p class="text-muted mb-4">Créez votre première annonce pour la retrouver ensuite directement ici.</p>
-                        <a href="{{ path('app_post_new') }}" class="btn btn-primary rounded-pill px-4">Créer une annonce</a>
+                        <a href="{{ path('app_post_new') }}" class="btn btn-collabis rounded-pill px-4">Créer une annonce</a>
                     </div>
                 </div>
             {% endfor %}

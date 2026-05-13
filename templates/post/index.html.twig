@@ -3,91 +3,60 @@
 {% block title %}Explorer les annonces - Collabis{% endblock %}
 
 {% block body %}
-<div class="container page-shell">
-    <div class="page-header">
-        <div>
-            <p class="page-kicker">Annonces</p>
-            <h1 class="fw-bold mb-0">Explorer les annonces</h1>
-        </div>
-        <a href="{{ path('app_post_new') }}" class="btn btn-primary rounded-pill px-4">
-            <i class="bi bi-plus-lg me-1"></i> Publier
-        </a>
-    </div>
+<div class="container py-4">
+    <h2 class="fw-bold mb-4" style="font-family: 'Antonio', sans-serif; color: var(--collabis-brown);">Explorer les annonces</h2>
 
+    {# Barre de recherche #}
     <form method="get" action="{{ path('app_post_index') }}" class="mb-4">
-        {% if selected_category_key is not empty %}
-            <input type="hidden" name="category" value="{{ selected_category_key }}">
-        {% endif %}
-        <div class="input-group input-group-lg">
-            <input
-                type="search"
-                name="q"
-                value="{{ search_query }}"
-                class="form-control"
-                placeholder="Rechercher par titre ou catégorie"
-                aria-label="Rechercher une annonce"
-            >
-            <button class="btn btn-primary" type="submit">
-                <i class="bi bi-search me-1"></i> Rechercher
-            </button>
+        <div class="input-group">
+            <input type="search" name="q" value="{{ search }}" class="form-control rounded-pill" placeholder="Rechercher...">
+            <button class="btn btn-primary rounded-pill ms-2" type="submit">Rechercher</button>
         </div>
     </form>
-
-    {% if categories|length > 0 %}
-        <nav class="d-flex flex-wrap gap-2 mb-4" aria-label="Filtrer les annonces par catégorie">
-            <a href="{{ path('app_post_index', search_query is empty ? {} : {'q': search_query}) }}" class="btn btn-sm rounded-pill {{ selected_category_key is empty ? 'btn-primary' : 'btn-outline-primary' }}">
-                Toutes
-            </a>
-            {% for category in categories %}
-                <a href="{{ path('app_post_index', search_query is empty ? {'category': category.categoryKey} : {'category': category.categoryKey, 'q': search_query}) }}" class="btn btn-sm rounded-pill {{ selected_category_key == category.categoryKey ? 'btn-primary' : 'btn-outline-primary' }}">
-                    {{ category.label }}
-                </a>
-            {% endfor %}
-        </nav>
-    {% endif %}
 
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         {% for post in posts %}
             <div class="col">
-                <article class="card h-100 border-0 shadow-sm">
-                    {% if post.media|length > 0 %}
-                        {% set imageUrl = post.media[0].url starts with 'http' ? post.media[0].url : asset('uploads/' ~ post.media[0].url) %}
-                        <img src="{{ imageUrl }}" class="card-img-top" alt="{{ post.title }}" style="height: 210px; object-fit: cover;">
-                    {% else %}
-                        <div class="bg-light d-flex align-items-center justify-content-center text-muted" style="height: 210px;">
-                            <i class="bi bi-image fs-1"></i>
-                        </div>
-                    {% endif %}
-
-                    <div class="card-body d-flex flex-column">
-                        <h2 class="h5 fw-bold">{{ post.title }}</h2>
-                        {% if post.categories|length > 0 %}
-                            <div class="d-flex flex-wrap gap-2 mb-3">
-                                {% for category in post.categories %}
-                                    <span class="badge bg-primary-subtle text-primary rounded-pill px-3 py-2">{{ category.label }}</span>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
-                        <p class="text-muted flex-grow-1">
-                            {{ post.description|slice(0, 140) }}{% if post.description|length > 140 %}...{% endif %}
-                        </p>
-                        <div class="d-flex gap-2">
-                            <a href="{{ path('app_post_show', {'id': post.id}) }}" class="btn btn-outline-primary rounded-pill flex-grow-1">Voir l’annonce</a>
-                            {% if app.user and post.user and app.user.id == post.user.id %}
-                                <a href="{{ path('app_post_edit', {'id': post.id}) }}" class="btn btn-light rounded-circle" title="Modifier">
-                                    <i class="bi bi-pencil"></i>
-                                </a>
-                            {% endif %}
+                <div class="card h-100 border-0 shadow-sm" style="border-radius: 30px; padding: 20px;">
+                    {# Utilisateur #}
+                    <div class="d-flex align-items-center mb-3">
+                        <img src="https://i.pravatar.cc/100?u={{ post.user.id|default(post.id) }}" class="rounded-circle" style="width: 45px; height: 45px; object-fit: cover;">
+                        <div class="ms-2">
+                            <div class="fw-bold">{{ post.user.username|default('Pseudo') }}</div>
+                            <div class="small text-orange" style="color: var(--collabis-orange);">{{ post.location|default('Suisse') }}</div>
                         </div>
                     </div>
-                </article>
-            </div>
-        {% else %}
-            <div class="col-12">
-                <div class="text-center bg-white border rounded-3 py-5">
-                    <h2 class="h4 fw-bold">Aucune annonce pour le moment</h2>
-                    <p class="text-muted mb-4">L’espace est prêt, il ne manque plus qu’une première proposition.</p>
-                    <a href="{{ path('app_post_new') }}" class="btn btn-primary rounded-pill px-4">Créer une annonce</a>
+
+                    {# Titre #}
+                    <div class="d-flex justify-content-between mb-2">
+                        <h3 style="font-family: 'Antonio', sans-serif; font-size: 2rem; line-height: 0.9;">{{ post.title }}</h3>
+                        <span class="badge rounded-pill border border-orange text-orange" style="color: var(--collabis-orange); border-color: var(--collabis-orange) !important;">{{ post.offerType|upper }}</span>
+                    </div>
+
+                    <p class="text-muted small">{{ post.description|slice(0, 100) }}...</p>
+
+                    {# MOSAÏQUE #}
+                    <div style="display: flex; gap: 10px; height: 180px; margin-bottom: 20px;">
+                        <div style="flex: 1.2; background: #D9D9D9; border-radius: 10px; overflow: hidden;">
+                            {% if post.media[0] is defined %}
+                                <img src="{{ post.media[0].url starts with 'http' ? post.media[0].url : asset('uploads/' ~ post.media[0].url) }}" style="width:100%; height:100%; object-fit:cover;">
+                            {% endif %}
+                        </div>
+                        <div style="flex: 1; display: flex; flex-direction: column; gap: 10px;">
+                            <div style="flex: 1; background: #D9D9D9; border-radius: 10px;">
+                                {% if post.media[1] is defined %}
+                                    <img src="{{ post.media[1].url starts with 'http' ? post.media[1].url : asset('uploads/' ~ post.media[1].url) }}" style="width:100%; height:100%; object-fit:cover; border-radius: 10px;">
+                                {% endif %}
+                            </div>
+                            <div style="flex: 1; background: #D9D9D9; border-radius: 10px;">
+                                {% if post.media[2] is defined %}
+                                    <img src="{{ post.media[2].url starts with 'http' ? post.media[2].url : asset('uploads/' ~ post.media[2].url) }}" style="width:100%; height:100%; object-fit:cover; border-radius: 10px;">
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <a href="{{ path('app_post_show', {id: post.id}) }}" class="btn w-100" style="background: var(--collabis-orange); color: white; border-radius: 20px; font-weight: 700;">Répondre</a>
                 </div>
             </div>
         {% endfor %}

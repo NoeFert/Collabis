@@ -19,17 +19,18 @@ class UserFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
-        // On utilise le Faker en français pour avoir de jolis textes
         $faker = Factory::create('fr_FR');
 
         // --- 1. CRÉATION DES CATÉGORIES ---
         $categories = [];
         $dataCategories = [
-            'Informatique' => 'info',
-            'Soutien Scolaire' => 'school',
-            'Bricolage' => 'brico',
-            'Logement' => 'home',
-            'Transport' => 'car'
+            '"demande"' => 'demande',
+            'Informatique' => 'informatique',
+            'Soutien scolaire' => 'soutien_scolaire',
+            'Bricolage' => 'bricolage',
+            'Logement' => 'logement',
+            'Autre' => 'autre',
+            'Transport' => 'transport'
         ];
 
         foreach ($dataCategories as $label => $key) {
@@ -47,7 +48,6 @@ class UserFixtures extends Fixture
             $user->setUsername($faker->userName());
             $user->setEmail("user$i@example.com");
             
-            // Hachage du mot de passe "password"
             $hashedPassword = $this->userPasswordHasher->hashPassword($user, 'password');
             $user->setPassword($hashedPassword);
             
@@ -55,28 +55,26 @@ class UserFixtures extends Fixture
             $users[] = $user;
         }
 
-        // --- 3. CRÉATION DES POSTS ET DES MÉDIAS ---
+        // --- 3. CRÉATION DES POSTS ET DES MÉDIAS (VERSION MOSAÏQUE) ---
         for ($j = 0; $j < 20; $j++) {
             $post = new Post();
             $post->setTitle($faker->sentence(4));
             $post->setDescription($faker->paragraph(3));
             
-            // On lie le post à un utilisateur au hasard
             $randomUser = $faker->randomElement($users);
             $post->setUser($randomUser);
 
-            // On ajoute une catégorie au hasard (relation ManyToMany)
             $randomCat = $faker->randomElement($categories);
             $post->addCategory($randomCat);
 
             $manager->persist($post);
 
-            // Pour chaque post, on crée 1 ou 2 images (Médias)
-            for ($m = 0; $m < $faker->numberBetween(1, 2); $m++) {
+            // ICI ON GÉNÈRE LES 3 IMAGES POUR TA MAQUETTE
+            for ($m = 0; $m < 3; $m++) {
                 $media = new Media();
-                // On utilise Picsum pour avoir des images de nature/tech différentes
-                $media->setUrl("https://picsum.photos/seed/" . $faker->uuid . "/800/600");
-                $media->setPost($post); // On lie l'image au post
+                // On crée une URL unique pour chaque image
+                $media->setUrl("https://picsum.photos/800/600?random=" . ($j * 3 + $m));
+                $media->setPost($post);
                 
                 $manager->persist($media);
             }

@@ -51,10 +51,16 @@
         <div class="col-md-5">
             <div class="ps-md-4">
                 <h1 class="display-6 fw-bold text-dark">{{ post.title }}</h1>
-                
+                <div class="mb-3 d-flex flex-wrap align-items-center gap-2">
+                    <span class="badge badge-{{ post.offerType|default('demande') }} badge-type rounded-pill px-3 py-2">{{ post.offerType|default('demande')|upper }}</span>
+                    {% if post.location %}
+                        <span class="text-muted"><i class="bi bi-geo-alt-fill me-1"></i>{{ post.location }}</span>
+                    {% endif %}
+                </div>
+
                 {# Petit badge pour la catégorie #}
                 {% for category in post.categories %}
-                    <span class="badge bg-primary-subtle text-primary rounded-pill px-3 py-2 mb-3">{{ category.label }}</span>
+                    <span class="badge badge-category rounded-pill px-3 py-2 mb-3">{{ category.label }}</span>
                 {% endfor %}
 
                 <hr class="my-4 opacity-10">
@@ -73,13 +79,13 @@
                                 {% else %}
                                     <form method="post" action="{{ path('app_conversation_start', {'id': post.id}) }}">
                                         <input type="hidden" name="_token" value="{{ csrf_token('start_conversation' ~ post.id) }}">
-                                        <button class="btn btn-success btn-lg w-100 rounded-pill shadow-sm" type="submit">
+                                        <button class="btn btn-collabis btn-lg w-100 rounded-pill shadow-sm" type="submit">
                                             <i class="bi bi-chat-dots me-2"></i>Contacter le propriétaire
                                         </button>
                                     </form>
                                 {% endif %}
                             {% else %}
-                                <a href="{{ path('app_login') }}" class="btn btn-success btn-lg rounded-pill shadow-sm">
+                                <a href="{{ path('app_login') }}" class="btn btn-collabis btn-lg rounded-pill shadow-sm">
                                     <i class="bi bi-box-arrow-in-right me-2"></i>Se connecter pour contacter
                                 </a>
                             {% endif %}
@@ -89,7 +95,7 @@
                                     Explorer
                                 </a>
                                 {% if app.user and post.user and app.user.id == post.user.id %}
-                                    <a href="{{ path('app_post_edit', {'id': post.id}) }}" class="btn btn-warning rounded-pill px-4">
+                                    <a href="{{ path('app_post_edit', {'id': post.id}) }}" class="btn btn-outline-secondary rounded-pill px-4">
                                         <i class="bi bi-pencil"></i>
                                     </a>
                                 {% endif %}

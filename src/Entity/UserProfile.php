@@ -35,6 +35,9 @@ class UserProfile implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $avatar_url = null;
 
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $bio = null;
+
     #[ORM\OneToMany(targetEntity: Post::class, mappedBy: 'user')]
     private Collection $posts;
 
@@ -135,6 +138,17 @@ class UserProfile implements UserInterface, PasswordAuthenticatedUserInterface
     public function setAvatarUrl(?string $avatar_url): static
     {
         $this->avatar_url = $avatar_url;
+        return $this;
+    }
+
+    public function getBio(): ?string
+    {
+        return $this->bio;
+    }
+
+    public function setBio(?string $bio): static
+    {
+        $this->bio = $bio;
         return $this;
     }
 
