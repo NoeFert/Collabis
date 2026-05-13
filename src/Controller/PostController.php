@@ -6,6 +6,7 @@ use App\Entity\Post;
 use App\Entity\Media; // Importation de l'entité Media
 use App\Entity\UserProfile;
 use App\Form\PostType;
+use App\Repository\CategoryRepository;
 use App\Repository\PostRepository;
 use App\Service\BlobStorage;
 use Doctrine\ORM\EntityManagerInterface;
@@ -20,16 +21,25 @@ use Symfony\Component\String\Slugger\SluggerInterface; // Importation du Slugger
 final class PostController extends AbstractController
 {
     #[Route(name: 'app_post_index', methods: ['GET'])]
-    public function index(PostRepository $postRepository): Response
+    public function index(Request $request, PostRepository $postRepository, CategoryRepository $categoryRepository): Response
     {
+        $selectedCategoryKey = $request->query->getString('category');
+        $searchQuery = trim($request->query->getString('q'));
+        $selectedCategory = $selectedCategoryKey !== ''
+            ? $categoryRepository->findOneBy(['category_key' => $selectedCategoryKey])
+            : null;
+
         return $this->render('post/index.html.twig', [
-            'posts' => $postRepository->findAll(),
+            'posts' => $postRepository->findForCategory($selectedCategory, $searchQuery),
+            'categories' => $categoryRepository->findBy([], ['label' => 'ASC']),
+            'selected_category_key' => $selectedCategory?->getCategoryKey(),
+            'search_query' => $searchQuery,
         ]);
     }
 
     #[Route('/new', name: 'app_post_new', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_USER')]
-    public function new(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger, BlobStorage $blobStorage): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger, BlobStorage $blobStorage, CategoryRepository $categoryRepository): Response
     {
         $post = new Post();
         $post->setUser($this->getUser());
@@ -61,6 +71,8 @@ final class PostController extends AbstractController
             }
             // --- FIN DE LA LOGIQUE IMAGE ---
 
+            $this->syncCategoriesFromRequest($post, $request, $categoryRepository);
+
             $entityManager->persist($post);
             $entityManager->flush();
 
@@ -83,7 +95,7 @@ final class PostController extends AbstractController
 
     #[Route('/{id}/edit', name: 'app_post_edit', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_USER')]
-    public function edit(Request $request, Post $post, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Post $post, EntityManagerInterface $entityManager, CategoryRepository $categoryRepository): Response
     {
         $this->denyAccessUnlessPostOwner($post);
 
@@ -91,6 +103,7 @@ final class PostController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $this->syncCategoriesFromRequest($post, $request, $categoryRepository);
             $entityManager->flush();
 
             return $this->redirectToRoute('app_post_index', [], Response::HTTP_SEE_OTHER);
@@ -130,6 +143,24 @@ final class PostController extends AbstractController
 
         if (!$user instanceof UserProfile || $post->getUser()?->getId() !== $user->getId()) {
             throw $this->createAccessDeniedException('Vous ne pouvez modifier que vos propres annonces.');
+        }
+    }
+
+    private function syncCategoriesFromRequest(Post $post, Request $request, CategoryRepository $categoryRepository): void
+    {
+        $postData = $request->request->all('post');
+        $categoryIds = array_filter(array_map('intval', $postData['categories'] ?? []));
+
+        foreach ($post->getCategories()->toArray() as $category) {
+            $post->removeCategory($category);
+        }
+
+        if ($categoryIds === []) {
+            return;
+        }
+
+        foreach ($categoryRepository->findBy(['id' => $categoryIds]) as $category) {
+            $post->addCategory($category);
         }
     }
 }

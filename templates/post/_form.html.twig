@@ -17,6 +17,23 @@
             }
         }) }}
 
+        <div>
+            {{ form_label(form.categories, null, {'label_attr': {'class': 'form-label'}}) }}
+            <div class="row g-2">
+                {% for category in form.categories %}
+                    <div class="col-sm-6">
+                        <div class="form-check border rounded-3 px-3 py-2 h-100">
+                            {{ form_widget(category, {'attr': {'class': 'form-check-input ms-0 me-2'}}) }}
+                            {{ form_label(category, null, {'label_attr': {'class': 'form-check-label'}}) }}
+                        </div>
+                    </div>
+                {% else %}
+                    <p class="text-muted mb-0">Aucune catégorie disponible pour le moment.</p>
+                {% endfor %}
+            </div>
+            {{ form_errors(form.categories) }}
+        </div>
+
         {{ form_row(form.images, {
             'attr': {
                 'class': 'form-control'

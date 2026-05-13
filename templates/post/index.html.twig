@@ -14,6 +14,38 @@
         </a>
     </div>
 
+    <form method="get" action="{{ path('app_post_index') }}" class="mb-4">
+        {% if selected_category_key is not empty %}
+            <input type="hidden" name="category" value="{{ selected_category_key }}">
+        {% endif %}
+        <div class="input-group input-group-lg">
+            <input
+                type="search"
+                name="q"
+                value="{{ search_query }}"
+                class="form-control"
+                placeholder="Rechercher par titre ou catégorie"
+                aria-label="Rechercher une annonce"
+            >
+            <button class="btn btn-primary" type="submit">
+                <i class="bi bi-search me-1"></i> Rechercher
+            </button>
+        </div>
+    </form>
+
+    {% if categories|length > 0 %}
+        <nav class="d-flex flex-wrap gap-2 mb-4" aria-label="Filtrer les annonces par catégorie">
+            <a href="{{ path('app_post_index', search_query is empty ? {} : {'q': search_query}) }}" class="btn btn-sm rounded-pill {{ selected_category_key is empty ? 'btn-primary' : 'btn-outline-primary' }}">
+                Toutes
+            </a>
+            {% for category in categories %}
+                <a href="{{ path('app_post_index', search_query is empty ? {'category': category.categoryKey} : {'category': category.categoryKey, 'q': search_query}) }}" class="btn btn-sm rounded-pill {{ selected_category_key == category.categoryKey ? 'btn-primary' : 'btn-outline-primary' }}">
+                    {{ category.label }}
+                </a>
+            {% endfor %}
+        </nav>
+    {% endif %}
+
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         {% for post in posts %}
             <div class="col">
@@ -29,6 +61,13 @@
 
                     <div class="card-body d-flex flex-column">
                         <h2 class="h5 fw-bold">{{ post.title }}</h2>
+                        {% if post.categories|length > 0 %}
+                            <div class="d-flex flex-wrap gap-2 mb-3">
+                                {% for category in post.categories %}
+                                    <span class="badge bg-primary-subtle text-primary rounded-pill px-3 py-2">{{ category.label }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
                         <p class="text-muted flex-grow-1">
                             {{ post.description|slice(0, 140) }}{% if post.description|length > 140 %}...{% endif %}
                         </p>
