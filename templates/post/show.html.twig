@@ -3,54 +3,52 @@
 {% block title %}Annonce : {{ post.title }}{% endblock %}
 
 {% block body %}
-<div class="container page-shell">
+<div class="page-shell">
     <div class="mb-4">
-        <a href="{{ path('app_post_index') }}" class="text-decoration-none">
+        <a href="{{ path('app_post_index') }}" class="section-link">
             <i class="bi bi-arrow-left me-1"></i> Retour aux annonces
         </a>
     </div>
 
-    <div class="row">
-        <!-- Colonne Gauche : Images -->
-        <div class="col-md-7">
-            <div class="card shadow-sm border-0">
-                <div class="card-body p-2">
-                    {% if post.media|length > 0 %}
-                        <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
-                            <div class="carousel-inner">
-                                {% for image in post.media %}
-                                    <div class="carousel-item {{ loop.first ? 'active' : '' }}">
-                                        {% set imageUrl = image.url starts with 'http' ? image.url : asset('uploads/' ~ image.url) %}
-                                        <img src="{{ imageUrl }}" class="d-block w-100 rounded" alt="Photo de l'annonce" style="height: 500px; object-fit: cover;">
-                                    </div>
-                                {% endfor %}
-                            </div>
-                            
-                            {% if post.media|length > 1 %}
-                                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                </button>
-                                <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
-                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                </button>
-                            {% endif %}
+    <div class="row post-detail-grid">
+        <div class="col-lg-7">
+            <div class="post-detail-media">
+                {% if post.media|length > 0 %}
+                    <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            {% for image in post.media %}
+                                <div class="carousel-item {{ loop.first ? 'active' : '' }}">
+                                    {% set imageUrl = image.url starts with 'http' ? image.url : asset('uploads/' ~ image.url) %}
+                                    <img src="{{ imageUrl }}" class="d-block" alt="Photo de {{ post.title }}">
+                                </div>
+                            {% endfor %}
                         </div>
-                    {% else %}
-                        <div class="bg-light d-flex align-items-center justify-content-center rounded" style="height: 400px;">
-                            <div class="text-center">
-                                <i class="bi bi-image text-muted" style="font-size: 4rem;"></i>
-                                <p class="text-muted mt-2">Aucune photo disponible</p>
-                            </div>
+
+                        {% if post.media|length > 1 %}
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Photo précédente</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Photo suivante</span>
+                            </button>
+                        {% endif %}
+                    </div>
+                {% else %}
+                    <div class="post-detail-empty">
+                        <div>
+                            <i class="bi bi-image fs-1"></i>
+                            <p class="mt-2 mb-0">Aucune photo disponible</p>
                         </div>
-                    {% endif %}
-                </div>
+                    </div>
+                {% endif %}
             </div>
         </div>
 
-        <!-- Colonne Droite : Infos -->
-        <div class="col-md-5">
-            <div class="ps-md-4">
-                <h1 class="display-6 fw-bold text-dark">{{ post.title }}</h1>
+        <div class="col-lg-5">
+            <div class="post-detail-panel">
+                <h1 class="display-6 fw-bold">{{ post.title }}</h1>
                 <div class="mb-3 d-flex flex-wrap align-items-center gap-2">
                     <span class="badge badge-{{ post.offerType|default('demande') }} badge-type rounded-pill px-3 py-2">{{ post.offerType|default('demande')|upper }}</span>
                     {% if post.location %}
@@ -66,47 +64,45 @@
                 <hr class="my-4 opacity-10">
                 
                 <h5 class="fw-bold mb-3">Description</h5>
-                <p class="text-muted" style="line-height: 1.7; white-space: pre-wrap;">{{ post.description }}</p>
+                <p class="post-detail-description">{{ post.description }}</p>
                 
-                <div class="card bg-light border-0 mt-5">
-                    <div class="card-body p-4">
-                        <div class="d-grid gap-3">
-                            {% if app.user %}
-                                {% if post.user and app.user.id == post.user.id %}
-                                    <button class="btn btn-secondary btn-lg rounded-pill" disabled>
-                                        <i class="bi bi-person-check me-2"></i>C’est votre annonce
-                                    </button>
-                                {% else %}
-                                    <form method="post" action="{{ path('app_conversation_start', {'id': post.id}) }}">
-                                        <input type="hidden" name="_token" value="{{ csrf_token('start_conversation' ~ post.id) }}">
-                                        <button class="btn btn-collabis btn-lg w-100 rounded-pill shadow-sm" type="submit">
-                                            <i class="bi bi-chat-dots me-2"></i>Contacter le propriétaire
-                                        </button>
-                                    </form>
-                                {% endif %}
+                <div class="action-panel">
+                    <div class="d-grid gap-3">
+                        {% if app.user %}
+                            {% if post.user and app.user.id == post.user.id %}
+                                <button class="btn btn-secondary btn-lg rounded-pill" disabled>
+                                    <i class="bi bi-person-check me-2"></i>C’est votre annonce
+                                </button>
                             {% else %}
-                                <a href="{{ path('app_login') }}" class="btn btn-collabis btn-lg rounded-pill shadow-sm">
-                                    <i class="bi bi-box-arrow-in-right me-2"></i>Se connecter pour contacter
-                                </a>
+                                <form method="post" action="{{ path('app_conversation_start', {'id': post.id}) }}">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('start_conversation' ~ post.id) }}">
+                                    <button class="btn btn-collabis btn-lg w-100 rounded-pill" type="submit">
+                                        <i class="bi bi-chat-dots me-2"></i>Contacter le propriétaire
+                                    </button>
+                                </form>
                             {% endif %}
-                            
-                            <div class="d-flex gap-2">
-                                <a href="{{ path('app_post_index') }}" class="btn btn-outline-secondary rounded-pill flex-grow-1">
-                                    Explorer
-                                </a>
-                                {% if app.user and post.user and app.user.id == post.user.id %}
-                                    <a href="{{ path('app_post_edit', {'id': post.id}) }}" class="btn btn-outline-secondary rounded-pill px-4">
-                                        <i class="bi bi-pencil"></i>
-                                    </a>
-                                {% endif %}
-                            </div>
+                        {% else %}
+                            <a href="{{ path('app_login') }}" class="btn btn-collabis btn-lg rounded-pill">
+                                <i class="bi bi-box-arrow-in-right me-2"></i>Se connecter pour contacter
+                            </a>
+                        {% endif %}
 
+                        <div class="d-flex gap-2">
+                            <a href="{{ path('app_post_index') }}" class="btn btn-outline-secondary rounded-pill flex-grow-1">
+                                Explorer
+                            </a>
                             {% if app.user and post.user and app.user.id == post.user.id %}
-                                <div class="mt-2 text-center">
-                                    {{ include('post/_delete_form.html.twig') }}
-                                </div>
+                                <a href="{{ path('app_post_edit', {'id': post.id}) }}" class="btn btn-outline-secondary rounded-pill px-4" aria-label="Modifier l'annonce">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
                             {% endif %}
                         </div>
+
+                        {% if app.user and post.user and app.user.id == post.user.id %}
+                            <div class="mt-2 text-center">
+                                {{ include('post/_delete_form.html.twig') }}
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>

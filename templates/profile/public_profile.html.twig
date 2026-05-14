@@ -3,19 +3,19 @@
 {% block title %}Profil public - Collabis{% endblock %}
 
 {% block body %}
-<div class="container page-shell">
+<div class="page-shell">
     <div class="mb-4">
-        <a href="{{ path('app_post_index') }}" class="text-decoration-none">
+        <a href="{{ path('app_post_index') }}" class="section-link">
             <i class="bi bi-arrow-left me-1"></i> Retour aux annonces
         </a>
     </div>
 
-    <div class="bg-white border rounded-3 p-4 shadow-sm d-flex align-items-center gap-3">
+    <div class="surface-card profile-summary">
         {% if user.avatarUrl %}
             {% set avatarUrl = user.avatarUrl starts with 'http' ? user.avatarUrl : asset('uploads/' ~ user.avatarUrl) %}
-            <img src="{{ avatarUrl }}" alt="Avatar de {{ user.username }}" class="rounded-circle object-fit-cover" style="width: 72px; height: 72px;">
+            <img src="{{ avatarUrl }}" alt="Avatar de {{ user.username }}" class="avatar-img avatar-xl">
         {% else %}
-            <div class="avatar-placeholder" style="width: 72px; height: 72px;">
+            <div class="avatar-placeholder avatar-xl">
                 {{ user.username|slice(0, 1)|upper }}
             </div>
         {% endif %}

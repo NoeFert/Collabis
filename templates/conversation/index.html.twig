@@ -3,7 +3,7 @@
 {% block title %}Messages - Collabis{% endblock %}
 
 {% block body %}
-<div class="container page-shell">
+<div class="page-shell">
     <div class="page-header">
         <div>
             <p class="page-kicker">Messagerie</p>
@@ -15,14 +15,14 @@
     </div>
 
     {% if conversations is empty %}
-        <div class="bg-white border rounded-3 p-5 text-center shadow-sm">
-            <i class="bi bi-chat-dots fs-1" style="color: var(--collabis-orange);"></i>
+        <div class="empty-state">
+            <i class="bi bi-chat-dots fs-1 icon-accent"></i>
             <h2 class="h4 fw-bold mt-3">Aucune conversation pour le moment</h2>
             <p class="text-muted mb-4">Quand vous contacterez un propriétaire depuis une annonce, l’échange apparaîtra ici.</p>
             <a href="{{ path('app_post_index') }}" class="btn btn-collabis rounded-pill px-4">Trouver une annonce</a>
         </div>
     {% else %}
-        <div class="list-group shadow-sm">
+        <div class="list-group surface-card overflow-hidden">
             {% for conversation in conversations %}
                 {% set otherUser = conversation.userProfile and conversation.userProfile.id == app.user.id ? conversation.interlocutor : conversation.userProfile %}
                 {% set lastMessage = conversation.messages|last %}

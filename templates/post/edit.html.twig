@@ -3,7 +3,7 @@
 {% block title %}Modifier l’annonce - Collabis{% endblock %}
 
 {% block body %}
-<div class="container page-shell">
+<div class="page-shell">
     <div class="page-header">
         <div>
             <p class="page-kicker">Annonce</p>
@@ -14,7 +14,7 @@
         </a>
     </div>
 
-    <div class="bg-white border rounded-3 p-4 shadow-sm">
+    <div class="surface-card p-4 p-md-5">
         {{ include('post/_form.html.twig', {'button_label': 'Enregistrer'}) }}
     </div>
 

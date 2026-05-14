@@ -8,296 +8,67 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
         <link href="https://fonts.googleapis.com/css2?family=Antonio:wght@700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 
-        <style>
-            :root {
-                --collabis-orange: #FE4F02;
-                --collabis-brown: #3B1A09;
-                --collabis-sand: #FFE8B4;
-                --collabis-white: #FFFFFF;
-            }
-
-            body {
-                font-family: 'Inter', sans-serif;
-                background-color: var(--collabis-sand);
-                color: var(--collabis-brown);
-                margin: 0;
-            }
-
-            /* --- HEADER & NAVBAR --- */
-            .header-container {
-                padding-top: 1.5rem;
-            }
-
-            .logo-brand img {
-                height: 45px; /* Tu peux ajuster la hauteur ici */
-                width: auto;
-            }
-
-            .top-actions {
-                display: flex;
-                align-items: center;
-                gap: 1.5rem;
-            }
-
-            /* --- BARRE RECHERCHE + FILTRES CENTRÉS HORIZONTALEMENT --- */
-            .search-filter-row {
-                margin-top: 2rem;
-                display: flex;
-                align-items: center;
-                justify-content: center; /* Centre la recherche et les filtres */
-                gap: 1.5rem;
-            }
-
-            .search-wrapper {
-                flex: 0 1 350px;
-            }
-
-            .search-bar {
-                background-color: transparent;
-                border: 2.5px solid var(--collabis-orange);
-                border-radius: 999px;
-                padding: 0.4rem 1.2rem;
-                width: 100%;
-                color: var(--collabis-brown);
-                outline: none;
-            }
-
-            .search-bar::placeholder {
-                color: var(--collabis-brown);
-                opacity: 0.6;
-            }
-
-            .filters-group {
-                display: flex;
-                gap: 0.5rem;
-                align-items: center;
-            }
-
-            .filter-btn {
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                min-width: 90px;
-                padding: 0.45rem 1rem;
-                border-radius: 999px;
-                border: 1.5px solid var(--collabis-orange);
-                background-color: transparent;
-                color: var(--collabis-orange);
-                text-transform: uppercase;
-                font-weight: 700;
-                transition: 0.2s ease;
-            }
-
-            .filter-btn.active,
-            .filter-btn:hover {
-                background-color: var(--collabis-orange);
-                color: white;
-            }
-
-            .search-wrapper {
-                flex: 1 1 320px;
-                max-width: 420px;
-            }
-
-            .search-bar {
-                width: 100%;
-                border: 2px solid var(--collabis-orange);
-                border-radius: 999px;
-                padding: 0.65rem 1.2rem;
-                font-size: 0.95rem;
-            }
-
-            /* --- BOUTONS & ICONES --- */
-            .filter-btn {
-                background-color: transparent;
-                border: 1.5px solid var(--collabis-orange);
-                color: var(--collabis-orange);
-                border-radius: 999px;
-                font-size: 0.75rem;
-                padding: 0.3rem 1.2rem;
-                text-transform: uppercase;
-                font-weight: 700;
-                transition: 0.2s;
-            }
-
-            .filter-btn:hover {
-                background-color: var(--collabis-orange);
-                color: white;
-            }
-
-            .btn-publier {
-                color: var(--collabis-orange) !important;
-                border: 2px solid var(--collabis-orange) !important;
-                border-radius: 999px;
-                font-weight: 700;
-                padding: 0.4rem 1.2rem;
-                display: flex;
-                align-items: center;
-                gap: 0.5rem;
-                text-decoration: none;
-                transition: 0.2s;
-            }
-
-            .btn-publier:hover {
-                background-color: var(--collabis-orange) !important;
-                color: white !important;
-            }
-
-            .nav-icon {
-                color: var(--collabis-orange);
-                font-size: 1.8rem;
-                text-decoration: none;
-            }
-
-            .app-main {
-                margin-top: 3rem;
-                min-height: 70vh;
-            }
-
-            h1, h2, h3 {
-                font-family: 'Antonio', sans-serif !important;
-                text-transform: uppercase;
-            }
-
-            /* --- BOUTONS PERSONNALISÉS COLLABIS --- */
-            .btn-collabis {
-                background-color: var(--collabis-orange);
-                color: white;
-                border: none;
-                text-decoration: none;
-                transition: all 0.2s;
-            }
-
-            .btn-collabis:hover {
-                background-color: #d63b00;
-                color: white;
-                text-decoration: none;
-            }
-
-            .btn-collabis-outline {
-                background-color: transparent;
-                color: var(--collabis-orange);
-                border: 2px solid var(--collabis-orange);
-                text-decoration: none;
-                transition: all 0.2s;
-            }
-
-            .btn-collabis-outline:hover {
-                background-color: var(--collabis-orange);
-                color: white;
-                text-decoration: none;
-            }
-
-            /* Override Bootstrap button colors to orange */
-            .btn-primary,
-            .btn-secondary,
-            .btn-outline-secondary,
-            .btn-outline-primary {
-                border-color: var(--collabis-orange);
-                color: var(--collabis-orange);
-            }
-
-            .btn-primary,
-            .btn-secondary {
-                background-color: var(--collabis-orange);
-                color: white;
-            }
-
-            .btn-outline-secondary,
-            .btn-outline-primary {
-                background-color: transparent;
-                color: var(--collabis-orange);
-            }
-
-            .btn-primary:hover,
-            .btn-secondary:hover,
-            .btn-outline-secondary:hover,
-            .btn-outline-primary:hover {
-                background-color: var(--collabis-orange);
-                color: white;
-                border-color: var(--collabis-orange);
-            }
-
-            /* --- AVATARS --- */
-            .avatar-placeholder {
-                background-color: var(--collabis-orange);
-                color: white;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-weight: bold;
-                border-radius: 9999px;
-            }
-
-            /* --- BADGES --- */
-            .badge-collabis,
-            .badge-category {
-                background-color: var(--collabis-orange);
-                color: white;
-            }
-
-            .badge-offre,
-            .badge-type.badge-offre {
-                background-color: #0a6245;
-                color: white;
-            }
-
-            .badge-demande,
-            .badge-type.badge-demande {
-                background-color: var(--collabis-brown);
-                color: white;
-            }
-
-            .badge-category {
-                border: 1px solid rgba(255, 79, 2, .18);
-                background-color: rgba(254, 79, 2, .12);
-                color: var(--collabis-brown);
-            }
-
-            /* --- BACKGROUNDS --- */
-            .bg-collabis {
-                background-color: var(--collabis-orange);
-            }
-        </style>
-
+        {{ importmap('app') }}
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
         
         <header class="header-container container">
-            <div class="d-flex justify-content-between align-items-center">
+            <div class="site-header-main">
                 <a href="{{ path('app_home') }}" class="logo-brand">
                     <img src="{{ asset('images/logo_sombre.png') }}" alt="Collabis Logo">
                 </a>
 
                 <div class="top-actions">
-                    <a href="{{ path('app_conversation') }}" class="nav-icon" title="Messages">
+                    <a href="{{ app.user ? path('app_conversation') : path('app_login') }}" class="nav-icon" title="Messages" aria-label="Messages">
                         <i class="bi bi-chat-left-text"></i>
                     </a>
-                    <a href="{{ path('app_post_new') }}" class="btn-publier">
-                        <i class="bi bi-plus-circle-fill"></i> Publier
+                    <a href="{{ app.user ? path('app_post_new') : path('app_login') }}" class="btn-publier" aria-label="Publier une annonce">
+                        <i class="bi bi-plus-circle-fill"></i>
+                        <span>Publier</span>
                     </a>
-                    <a href="{{ path('app_my_profile') }}" class="nav-icon" title="Mon Profil">
-                        <i class="bi bi-person-circle"></i>
+                    <a href="{{ app.user ? path('app_my_profile') : path('app_login') }}" class="nav-icon" title="{{ app.user ? 'Mon profil' : 'Connexion' }}" aria-label="{{ app.user ? 'Mon profil' : 'Connexion' }}">
+                        {% if app.user and app.user.avatarUrl %}
+                            {% set headerAvatarUrl = app.user.avatarUrl starts with 'http' ? app.user.avatarUrl : asset('uploads/' ~ app.user.avatarUrl) %}
+                            <img src="{{ headerAvatarUrl }}" alt="">
+                        {% else %}
+                            <i class="bi bi-person-circle"></i>
+                        {% endif %}
                     </a>
                 </div>
             </div>
 
-            <div class="search-filter-row d-none d-md-flex">
-                <form action="{{ path('app_post_index') }}" method="get" class="search-wrapper">
+            <div class="search-filter-row">
+                <form action="{{ path('app_post_index') }}" method="get" class="search-wrapper" role="search">
                     <input type="hidden" name="offer" value="{{ app.request.get('offer') }}">
                     <input type="text" name="q" class="search-bar" placeholder="Recherche" value="{{ app.request.get('q') }}">
+                    <button class="search-submit" type="submit" aria-label="Rechercher">
+                        <i class="bi bi-search"></i>
+                    </button>
                 </form>
                 
                 <div class="filters-group">
-                    <a href="{{ path('app_post_index', {'offer': 'offre'}) }}" class="filter-btn{{ app.request.get('offer') == 'offre' ? ' active' : '' }}">Offre</a>
-                    <a href="{{ path('app_post_index', {'offer': 'demande'}) }}" class="filter-btn{{ app.request.get('offer') == 'demande' ? ' active' : '' }}">Demande</a>
+                    <a href="{{ path('app_post_index', {'q': app.request.get('q')}) }}" class="filter-btn{{ app.request.get('offer') is empty ? ' active' : '' }}">Tous</a>
+                    <a href="{{ path('app_post_index', {'offer': 'offre', 'q': app.request.get('q')}) }}" class="filter-btn{{ app.request.get('offer') == 'offre' ? ' active' : '' }}">Offre</a>
+                    <a href="{{ path('app_post_index', {'offer': 'demande', 'q': app.request.get('q')}) }}" class="filter-btn{{ app.request.get('offer') == 'demande' ? ' active' : '' }}">Demande</a>
                 </div>
             </div>
         </header>
 
-        <main class="app-main container">
+        <main class="{% block main_class %}app-main container{% endblock %}">
+            {% set flashMessages = app.flashes %}
+            {% if flashMessages is not empty %}
+                <div class="flash-stack">
+                    {% for label, messages in flashMessages %}
+                        {% set alertType = label == 'error' ? 'danger' : label %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ alertType }} mb-3" role="alert">{{ message }}</div>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+            {% endif %}
             {% block body %}{% endblock %}
         </main>
 

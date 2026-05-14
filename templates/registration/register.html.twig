@@ -2,127 +2,15 @@
 
 {% block title %}Inscription - Collabis{% endblock %}
 
-{% block stylesheets %}
-    <style>
-        :root {
-            --collabis-orange: #FE4F02;
-            --collabis-brown: #3B1A09;
-            --collabis-sand: #FFE8B4;
-        }
-
-        .auth-shell { padding: 3rem 0; }
-
-        .auth-card {
-            animation: authEnter .28s ease-out;
-            background: #ffffff;
-            border: none;
-            border-radius: 2.5rem;
-            box-shadow: 0 24px 70px rgba(59, 26, 9, 0.1);
-            min-height: 650px;
-            overflow: hidden;
-        }
-
-        /* --- PANNEAU GAUCHE (FORMULAIRE) --- */
-        .auth-form-panel { padding: 3rem; background: #fff; }
-        
-        .auth-input {
-            background-color: #f8f9fa;
-            border: 2px solid transparent;
-            border-radius: 1rem;
-            padding: .85rem 1rem;
-            transition: all 0.2s;
-        }
-
-        .auth-input:focus {
-            background-color: #ffffff;
-            border-color: var(--collabis-orange);
-            box-shadow: 0 0 0 .25rem rgba(254, 79, 2, 0.1);
-        }
-
-        .auth-switch {
-            background: #f1f5f9;
-            border-radius: 999px;
-            padding: .3rem;
-        }
-
-        .auth-switch a {
-            border-radius: 999px;
-            color: #64748b;
-            font-weight: 700;
-            padding: .6rem 1rem;
-            text-align: center;
-            text-decoration: none;
-            width: 50%;
-        }
-
-        .auth-switch a.active {
-            background: var(--collabis-orange);
-            color: #ffffff;
-            box-shadow: 0 4px 12px rgba(254, 79, 2, 0.2);
-        }
-
-        .btn-collabis {
-            background: var(--collabis-orange);
-            color: white;
-            border: none;
-            border-radius: 999px;
-            padding: 0.8rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: transform 0.2s;
-        }
-        .btn-collabis:hover { transform: scale(1.02); color: white; opacity: 0.9; }
-
-        /* --- PANNEAU DROITE (BANNIÈRE) --- */
-        .auth-side-panel {
-            background: var(--collabis-sand);
-            color: var(--collabis-brown);
-            padding: 3rem;
-            height: 100%;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
-
-        .sticker-img {
-            max-width: 80%;
-            height: auto;
-            margin-top: 2rem;
-            filter: drop-shadow(0 10px 15px rgba(59, 26, 9, 0.1));
-            animation: float 4s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-        }
-
-        @keyframes authEnter {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .auth-terms {
-            background: #fff9f0;
-            border: 1px solid var(--collabis-orange);
-            border-radius: 1rem;
-            padding: 1rem;
-        }
-    </style>
-{% endblock %}
-
 {% block body %}
-<div class="container auth-shell">
+<div class="auth-shell">
     <div class="auth-card">
         <div class="row g-0">
             <div class="col-lg-6">
                 <div class="auth-form-panel d-flex flex-column justify-content-center">
                     <div class="mb-4">
-                        <h1 class="fw-bold mb-2" style="font-family: 'Antonio', sans-serif; color: var(--collabis-brown); font-size: 2.5rem;">CRÉER UN COMPTE</h1>
+                        <p class="page-kicker">Inscription</p>
+                        <h1 class="fw-bold mb-2">Créer un compte</h1>
                         <p class="text-muted mb-0">Rejoignez Collabis et commencez à partager.</p>
                     </div>
 
@@ -170,19 +58,17 @@
             </div>
 
             <div class="col-lg-6 d-none d-lg-block">
-                <aside class="auth-side-panel">
-                    <div style="z-index: 2;">
-                        <h2 class="display-5 fw-bold mb-3" style="font-family: 'Antonio', sans-serif; text-transform: uppercase;">
+                <aside class="auth-side-panel auth-side-panel--centered">
+                    <div>
+                        <h2 class="display-5 fw-bold mb-3">
                             PRÊTEZ UNE MAIN,<br>TROUVEZ UNE SOLUTION.
                         </h2>
                         <p class="fs-5 opacity-75">Collabis est la plateforme d'entraide où chaque coup de main compte.</p>
                         
-                        {# TON IMAGE ICI #}
                         <img src="{{ asset('images/STICKER_MAIN.svg') }}" alt="Entraide" class="sticker-img">
                     </div>
 
-                    {# Texte de marque en bas #}
-                    <div style="position: absolute; bottom: 30px; font-family: 'Antonio', sans-serif; color: var(--collabis-orange); letter-spacing: 3px; font-weight: bold;">
+                    <div class="auth-side-footer">
                         COLLABIS.CH
                     </div>
                 </aside>

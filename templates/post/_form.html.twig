@@ -10,9 +10,15 @@
 
         <div class="mb-3">
             <label class="form-label">Type d’annonce</label>
-            <div class="d-flex gap-3 flex-wrap">
-                {{ form_widget(form.offerType) }}
+            <div class="post-type-options">
+                {% for choice in form.offerType %}
+                    <div class="post-type-option">
+                        {{ form_widget(choice, {'attr': {'class': 'post-type-input'}}) }}
+                        {{ form_label(choice, null, {'label_attr': {'class': 'post-type-label'}}) }}
+                    </div>
+                {% endfor %}
             </div>
+            {{ form_errors(form.offerType) }}
             <div class="form-text text-muted">Chaque annonce reçoit un badge Offre ou Demande.</div>
         </div>
 
