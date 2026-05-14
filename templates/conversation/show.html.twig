@@ -5,9 +5,9 @@
 {% block body %}
 {% set otherUser = conversation.userProfile and conversation.userProfile.id == app.user.id ? conversation.interlocutor : conversation.userProfile %}
 
-<div class="container page-shell">
+<div class="page-shell">
     <div class="mb-4">
-        <a href="{{ path('app_conversation') }}" class="text-decoration-none">
+        <a href="{{ path('app_conversation') }}" class="section-link">
             <i class="bi bi-arrow-left me-1"></i> Retour aux messages
         </a>
     </div>
@@ -24,12 +24,12 @@
         {% endif %}
     </div>
 
-    <div class="bg-white border rounded-3 shadow-sm">
-        <div class="p-4" style="min-height: 360px;">
+    <div class="surface-card overflow-hidden">
+        <div class="p-4 message-thread">
             {% for message in conversation.messages %}
                 {% set isMine = message.sender.id == app.user.id %}
                 <div class="d-flex mb-3 {{ isMine ? 'justify-content-end' : 'justify-content-start' }}">
-                <div class="p-3 rounded-3 {{ isMine ? 'bg-collabis text-white' : 'bg-light text-dark' }}" style="max-width: 75%;">
+                    <div class="message-bubble {{ isMine ? 'bg-collabis text-white' : 'bg-light text-dark' }}">
                         <p class="mb-1">{{ message.content|nl2br }}</p>
                         <small class="{{ isMine ? 'text-white-50' : 'text-muted' }}">{{ message.datetime|date('d/m/Y H:i') }}</small>
                     </div>
@@ -37,7 +37,7 @@
             {% else %}
                 <div class="h-100 d-flex align-items-center justify-content-center text-center py-5">
                     <div>
-                        <i class="bi bi-chat-square-text fs-1" style="color: var(--collabis-orange);"></i>
+                        <i class="bi bi-chat-square-text fs-1 icon-accent"></i>
                         <h2 class="h5 fw-bold mt-3">La conversation est prête</h2>
                         <p class="text-muted mb-0">Envoyez un premier message pour lancer l’échange.</p>
                     </div>
@@ -45,11 +45,11 @@
             {% endfor %}
         </div>
 
-        <form method="post" action="{{ path('app_conversation_message', {'id': conversation.id}) }}" class="border-top p-3">
+        <form method="post" action="{{ path('app_conversation_message', {'id': conversation.id}) }}" class="border-top p-3 message-composer">
             <input type="hidden" name="_token" value="{{ csrf_token('send_message' ~ conversation.id) }}">
             <div class="d-flex gap-2">
                 <textarea name="content" class="form-control" rows="2" required placeholder="Écrire un message"></textarea>
-                <button class="btn btn-collabis rounded-circle flex-shrink-0" type="submit" aria-label="Envoyer" title="Envoyer" style="width: 48px; height: 48px;">
+                <button class="btn btn-collabis rounded-circle flex-shrink-0 icon-button icon-button-md" type="submit" aria-label="Envoyer" title="Envoyer">
                     <i class="bi bi-send"></i>
                 </button>
             </div>

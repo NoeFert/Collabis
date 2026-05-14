@@ -2,150 +2,68 @@
 
 {% block title %}Explorer les annonces - Collabis{% endblock %}
 
-{% block stylesheets %}
-    <style>
-        .post-card {
-            border-radius: 30px;
-            padding: 20px;
-            background: #fff;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .post-card-heading {
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-            gap: 0.75rem;
-            margin-bottom: 0.75rem;
-            min-height: 4rem;
-        }
-
-        .post-card-title {
-            flex: 1 1 auto;
-            min-width: 0;
-            margin: 0;
-            font-family: 'Antonio', sans-serif;
-            font-size: 2rem;
-            line-height: 0.95;
-            color: var(--collabis-brown);
-        }
-
-        .post-offer-badge {
-            flex: 0 0 96px;
-            width: 96px;
-            min-height: 28px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border: 1.5px solid var(--collabis-orange);
-            border-radius: 999px;
-            color: var(--collabis-orange);
-            font-size: 0.68rem;
-            font-weight: 700;
-            line-height: 1;
-            text-transform: uppercase;
-            white-space: nowrap;
-        }
-
-        .post-card-description {
-            min-height: 3.5rem;
-        }
-
-        .post-card-media {
-            display: grid;
-            grid-template-columns: 1.2fr 1fr;
-            gap: 10px;
-            height: 180px;
-            margin-bottom: 20px;
-        }
-
-        .post-card-media--single {
-            grid-template-columns: 1fr;
-        }
-
-        .post-card-media-cell {
-            background: rgba(59, 26, 9, 0.08);
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .post-card-media-main {
-            height: 100%;
-        }
-
-        .post-card-media-secondary {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            min-height: 0;
-        }
-
-        .post-card-media-secondary .post-card-media-cell {
-            flex: 1;
-            min-height: 0;
-        }
-
-        .post-card-media img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .post-card-action {
-            margin-top: auto;
-        }
-    </style>
-{% endblock %}
-
 {% block body %}
-<div class="container py-4">
-    <h2 class="fw-bold mb-4" style="font-family: 'Antonio', sans-serif; color: var(--collabis-brown);">Explorer les annonces</h2>
-
-    {# Barre de recherche #}
-    <form method="get" action="{{ path('app_post_index') }}" class="mb-4">
-        <div class="input-group">
-            <input type="search" name="q" value="{{ search }}" class="form-control rounded-pill" placeholder="Rechercher...">
-            <button class="btn btn-primary rounded-pill ms-2" type="submit">Rechercher</button>
+<section class="page-shell">
+    <div class="page-header">
+        <div>
+            <p class="page-kicker">Annonces</p>
+            <h1 class="fw-bold mb-0">Explorer les annonces</h1>
+            {% if search or offer_filter %}
+                <p class="text-muted mb-0 mt-2">
+                    {% if search %}Recherche : <strong>{{ search }}</strong>{% endif %}
+                    {% if search and offer_filter %} · {% endif %}
+                    {% if offer_filter %}Filtre : <strong>{{ offer_filter|capitalize }}</strong>{% endif %}
+                </p>
+            {% endif %}
         </div>
-    </form>
+        <a href="{{ path('app_post_new') }}" class="btn btn-collabis rounded-pill px-4">
+            <i class="bi bi-plus-lg me-1"></i> Publier
+        </a>
+    </div>
 
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         {% for post in posts %}
             <div class="col">
-                <div class="card h-100 border-0 shadow-sm post-card">
-                    {# Utilisateur #}
-                    <div class="d-flex align-items-center mb-3">
-                        <img src="https://i.pravatar.cc/100?u={{ post.user.id|default(post.id) }}" class="rounded-circle" style="width: 45px; height: 45px; object-fit: cover;">
-                        <div class="ms-2">
-                            <div class="fw-bold">{{ post.user.username|default('Pseudo') }}</div>
-                            <div class="small text-orange" style="color: var(--collabis-orange);">{{ post.location|default('Suisse') }}</div>
+                <article class="post-card">
+                    {% set authorName = post.user ? post.user.username|default('Pseudo') : 'Pseudo' %}
+                    <div class="post-card-user">
+                        {% if post.user and post.user.avatarUrl %}
+                            {% set avatarUrl = post.user.avatarUrl starts with 'http' ? post.user.avatarUrl : asset('uploads/' ~ post.user.avatarUrl) %}
+                            <img src="{{ avatarUrl }}" class="avatar-img avatar-sm" alt="Avatar de {{ authorName }}">
+                        {% else %}
+                            <div class="avatar-placeholder avatar-sm" aria-label="Avatar de {{ authorName }}">
+                                {{ authorName|slice(0, 1)|upper }}
+                            </div>
+                        {% endif %}
+                        <div class="min-w-0">
+                            <div class="post-card-user-name">{{ authorName }}</div>
+                            <div class="post-card-user-location">{{ post.location|default('Suisse') }}</div>
                         </div>
                     </div>
 
-                    {# Titre #}
                     <div class="post-card-heading">
-                        <h3 class="post-card-title">{{ post.title }}</h3>
-                        <span class="post-offer-badge">{{ post.offerType|upper }}</span>
+                        <h2 class="post-card-title">{{ post.title }}</h2>
+                        <span class="post-offer-badge">{{ post.offerType|default('demande')|upper }}</span>
                     </div>
 
-                    <p class="text-muted small post-card-description">{{ post.description|slice(0, 100) }}...</p>
+                    <p class="post-card-description">
+                        {{ post.description|default('Aucune description pour le moment.')|slice(0, 110) }}{% if post.description|length > 110 %}...{% endif %}
+                    </p>
 
-                    {# MOSAÏQUE #}
                     {% set media_count = post.media|length %}
                     {% if media_count > 0 %}
                         <div class="post-card-media {{ media_count == 1 ? 'post-card-media--single' : '' }}">
                             <div class="post-card-media-cell post-card-media-main">
-                                <img src="{{ post.media[0].url starts with 'http' ? post.media[0].url : asset('uploads/' ~ post.media[0].url) }}">
+                                <img src="{{ post.media[0].url starts with 'http' ? post.media[0].url : asset('uploads/' ~ post.media[0].url) }}" alt="Photo de {{ post.title }}">
                             </div>
                             {% if media_count > 1 %}
                                 <div class="post-card-media-secondary">
                                     <div class="post-card-media-cell">
-                                        <img src="{{ post.media[1].url starts with 'http' ? post.media[1].url : asset('uploads/' ~ post.media[1].url) }}">
+                                        <img src="{{ post.media[1].url starts with 'http' ? post.media[1].url : asset('uploads/' ~ post.media[1].url) }}" alt="">
                                     </div>
                                     {% if media_count > 2 %}
                                         <div class="post-card-media-cell">
-                                            <img src="{{ post.media[2].url starts with 'http' ? post.media[2].url : asset('uploads/' ~ post.media[2].url) }}">
+                                            <img src="{{ post.media[2].url starts with 'http' ? post.media[2].url : asset('uploads/' ~ post.media[2].url) }}" alt="">
                                         </div>
                                     {% endif %}
                                 </div>
@@ -154,11 +72,19 @@
                     {% endif %}
 
                     <div class="post-card-action">
-                        <a href="{{ path('app_post_show', {id: post.id}) }}" class="btn w-100" style="background: var(--collabis-orange); color: white; border-radius: 20px; font-weight: 700;">Répondre</a>
+                        <a href="{{ path('app_post_show', {id: post.id}) }}" class="btn btn-collabis w-100">Répondre</a>
                     </div>
+                </article>
+            </div>
+        {% else %}
+            <div class="col-12">
+                <div class="empty-state">
+                    <h2 class="h4 fw-bold">Aucune annonce trouvée</h2>
+                    <p class="text-muted mb-4">Essayez une autre recherche ou revenez à tous les résultats.</p>
+                    <a href="{{ path('app_post_index') }}" class="btn btn-collabis-outline rounded-pill px-4">Réinitialiser</a>
                 </div>
             </div>
         {% endfor %}
     </div>
-</div>
+</section>
 {% endblock %}

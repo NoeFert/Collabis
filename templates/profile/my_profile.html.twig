@@ -4,7 +4,7 @@
 
 {% block body %}
 {% set user = app.user %}
-<div class="container page-shell">
+<div class="page-shell">
     <div class="page-header mb-5">
         <div>
             <p class="page-kicker">Compte</p>
@@ -15,12 +15,12 @@
         </a>
     </div>
 
-    <div class="bg-white border rounded-3 p-4 shadow-sm d-flex align-items-center gap-3 mb-5">
+    <div class="surface-card profile-summary">
         {% if user.avatarUrl %}
             {% set avatarUrl = user.avatarUrl starts with 'http' ? user.avatarUrl : asset('uploads/' ~ user.avatarUrl) %}
-            <img src="{{ avatarUrl }}" alt="Avatar de {{ user.email }}" class="rounded-circle object-fit-cover" style="width: 64px; height: 64px;">
+            <img src="{{ avatarUrl }}" alt="Avatar de {{ user.email }}" class="avatar-img avatar-md">
         {% else %}
-            <div class="avatar-placeholder" style="width: 64px; height: 64px;">
+            <div class="avatar-placeholder avatar-md">
                 {{ user.email|slice(0, 1)|upper }}
             </div>
         {% endif %}
@@ -32,11 +32,11 @@
                 <p class="text-muted mb-0">Retrouvez vos messages et vos annonces depuis la navigation principale.</p>
             {% endif %}
         </div>
-        <div class="d-flex gap-2 flex-shrink-0">
-            <a href="{{ path('app_edit_profile') }}" class="btn btn-collabis-outline rounded-circle" title="Modifier le profil" style="width: 48px; height: 48px; display: flex; align-items: center; justify-content: center;">
+        <div class="profile-actions">
+            <a href="{{ path('app_edit_profile') }}" class="btn btn-collabis-outline rounded-circle icon-button icon-button-md" title="Modifier le profil">
                 <i class="bi bi-pencil"></i>
             </a>
-            <a href="{{ path('app_logout') }}" class="btn btn-outline-danger rounded-circle" title="Déconnexion" style="width: 48px; height: 48px; display: flex; align-items: center; justify-content: center;">
+            <a href="{{ path('app_logout') }}" class="btn btn-outline-danger rounded-circle icon-button icon-button-md" title="Déconnexion">
                 <i class="bi bi-box-arrow-right"></i>
             </a>
         </div>
@@ -56,17 +56,17 @@
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
             {% for post in posts %}
                 <div class="col">
-                    <article class="card h-100 border-0 shadow-sm">
+                    <article class="surface-card h-100 overflow-hidden">
                         {% if post.media|length > 0 %}
                             {% set imageUrl = post.media[0].url starts with 'http' ? post.media[0].url : asset('uploads/' ~ post.media[0].url) %}
-                            <img src="{{ imageUrl }}" class="card-img-top" alt="{{ post.title }}" style="height: 190px; object-fit: cover;">
+                            <img src="{{ imageUrl }}" class="profile-post-image" alt="{{ post.title }}">
                         {% else %}
-                            <div class="bg-light d-flex align-items-center justify-content-center text-muted" style="height: 190px;">
+                            <div class="profile-post-placeholder">
                                 <i class="bi bi-image fs-1"></i>
                             </div>
                         {% endif %}
 
-                        <div class="card-body d-flex flex-column">
+                        <div class="profile-post-body d-flex flex-column">
                             <h3 class="h5 fw-bold">{{ post.title }}</h3>
 
                             {% if post.categories|length > 0 %}
@@ -92,7 +92,7 @@
                 </div>
             {% else %}
                 <div class="col-12">
-                    <div class="text-center bg-white border rounded-3 py-5 px-4">
+                    <div class="empty-state">
                         <h3 class="h4 fw-bold">Vous n’avez pas encore publié d’annonce</h3>
                         <p class="text-muted mb-4">Créez votre première annonce pour la retrouver ensuite directement ici.</p>
                         <a href="{{ path('app_post_new') }}" class="btn btn-collabis rounded-pill px-4">Créer une annonce</a>

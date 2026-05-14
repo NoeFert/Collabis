@@ -2,154 +2,8 @@
 
 {% block title %}Connexion - Collabis{% endblock %}
 
-{% block stylesheets %}
-    <style>
-        .auth-shell {
-            padding-bottom: 3rem;
-            padding-top: 3rem;
-        }
-
-        .auth-card {
-            animation: authEnter .28s ease-out;
-            background: #ffffff;
-            border: 1px solid rgba(100, 116, 139, .16);
-            border-radius: 1.5rem;
-            box-shadow: 0 24px 70px rgba(15, 23, 42, .14);
-            min-height: 560px;
-            overflow: hidden;
-        }
-
-        .auth-form-panel,
-        .auth-side-panel {
-            min-height: 560px;
-        }
-
-        .auth-form-panel {
-            padding: 2.5rem;
-        }
-
-        .auth-side-panel {
-            background: #FFE8B4;
-            color: var(--collabis-brown);
-            overflow: hidden;
-            padding: 2.5rem;
-            position: relative;
-        }
-
-        .auth-side-panel::before {
-            background-image: radial-gradient(rgba(59, 26, 9, .12) 1px, transparent 1px);
-            background-size: 20px 20px;
-            content: "";
-            inset: 0;
-            opacity: .55;
-            position: absolute;
-        }
-
-        .auth-side-panel > * {
-            position: relative;
-            z-index: 1;
-        }
-
-        .auth-floating-card {
-            background: rgba(255, 255, 255, .62);
-            border: 1px solid rgba(59, 26, 9, .12);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 18px 40px rgba(59, 26, 9, .08);
-        }
-
-        .auth-side-brand {
-            color: var(--collabis-orange);
-        }
-
-        .auth-side-panel .btn-outline-light {
-            background: #ffffff;
-            border-color: var(--collabis-orange);
-            color: var(--collabis-orange);
-            font-weight: 700;
-        }
-
-        .auth-side-panel .btn-outline-light:hover {
-            background: var(--collabis-orange);
-            border-color: var(--collabis-orange);
-            color: #ffffff;
-        }
-
-        .auth-icon-btn {
-            height: 42px;
-            width: 42px;
-        }
-
-        .auth-input {
-            background-color: #f1f5f9;
-            border: 1px solid transparent;
-            border-radius: .75rem;
-            padding: .85rem 1rem;
-        }
-
-        .auth-input:focus {
-            background-color: #ffffff;
-            border-color: rgba(49, 130, 206, .45);
-            box-shadow: 0 0 0 .25rem rgba(49, 130, 206, .12);
-        }
-
-        .auth-switch {
-            background: #f1f5f9;
-            border-radius: 999px;
-            padding: .25rem;
-        }
-
-        .auth-switch a {
-            border-radius: 999px;
-            color: var(--collabis-muted);
-            font-weight: 700;
-            padding: .6rem 1rem;
-            text-align: center;
-            text-decoration: none;
-            transition: all .2s ease;
-            width: 50%;
-        }
-
-        .auth-switch a.active {
-            background: #ffffff;
-            box-shadow: 0 8px 20px rgba(15, 23, 42, .08);
-            color: var(--collabis-primary);
-        }
-
-        @keyframes authEnter {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @media (max-width: 991.98px) {
-            .auth-card,
-            .auth-form-panel,
-            .auth-side-panel {
-                min-height: auto;
-            }
-
-            .auth-side-panel {
-                border-radius: 0 0 1.5rem 1.5rem;
-            }
-        }
-
-        @media (max-width: 575.98px) {
-            .auth-form-panel,
-            .auth-side-panel {
-                padding: 1.5rem;
-            }
-        }
-    </style>
-{% endblock %}
-
 {% block body %}
-<div class="container auth-shell">
+<div class="auth-shell">
     <div class="auth-card">
         <div class="row g-0">
             <div class="col-lg-6">
@@ -176,18 +30,6 @@
                         </div>
                     {% endif %}
 
-                    <div class="d-flex gap-2 mb-4" aria-label="Connexions rapides">
-                        <button type="button" class="btn btn-light border rounded-circle auth-icon-btn" title="Google" aria-label="Google">
-                            <i class="bi bi-google"></i>
-                        </button>
-                        <button type="button" class="btn btn-light border rounded-circle auth-icon-btn" title="GitHub" aria-label="GitHub">
-                            <i class="bi bi-github"></i>
-                        </button>
-                        <button type="button" class="btn btn-light border rounded-circle auth-icon-btn" title="LinkedIn" aria-label="LinkedIn">
-                            <i class="bi bi-linkedin"></i>
-                        </button>
-                    </div>
-
                     <form method="post" class="vstack gap-3">
                         <div>
                             <label for="inputEmail" class="form-label fw-semibold">Adresse email</label>
@@ -206,7 +48,7 @@
                                 <input class="form-check-input" type="checkbox" name="_remember_me" id="rememberMe">
                                 <label class="form-check-label text-muted" for="rememberMe">Se souvenir de moi</label>
                             </div>
-                            <a href="{{ path('app_register') }}" class="text-decoration-none fw-semibold" style="color: var(--collabis-orange);">Créer un compte</a>
+                            <a href="{{ path('app_register') }}" class="auth-inline-link">Créer un compte</a>
                         </div>
 
                         <button class="btn btn-collabis btn-lg rounded-pill mt-2" type="submit">
@@ -229,9 +71,9 @@
                         </a>
                     </div>
 
-                    <div class="auth-floating-card rounded-3 p-4 mt-5">
+                    <div class="auth-floating-card p-4 mt-5">
                         <div class="d-flex align-items-center gap-3 mb-3">
-                            <div class="bg-white rounded-circle d-flex align-items-center justify-content-center" style="height: 44px; width: 44px; color: var(--collabis-orange);">
+                            <div class="feature-icon">
                                 <i class="bi bi-chat-heart fs-4"></i>
                             </div>
                             <div>
@@ -240,7 +82,7 @@
                             </div>
                         </div>
                         <div class="d-flex align-items-center gap-3">
-                            <div class="bg-white rounded-circle d-flex align-items-center justify-content-center" style="height: 44px; width: 44px; color: var(--collabis-orange);">
+                            <div class="feature-icon">
                                 <i class="bi bi-people fs-4"></i>
                             </div>
                             <div>
