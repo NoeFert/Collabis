@@ -29,19 +29,19 @@
         }
 
         .auth-side-panel {
-            background: linear-gradient(135deg, var(--collabis-primary), #1f9d7a);
-            color: #ffffff;
+            background: #FFE8B4;
+            color: var(--collabis-brown);
             overflow: hidden;
             padding: 2.5rem;
             position: relative;
         }
 
         .auth-side-panel::before {
-            background-image: radial-gradient(rgba(255, 255, 255, .24) 1px, transparent 1px);
+            background-image: radial-gradient(rgba(59, 26, 9, .12) 1px, transparent 1px);
             background-size: 20px 20px;
             content: "";
             inset: 0;
-            opacity: .65;
+            opacity: .55;
             position: absolute;
         }
 
@@ -51,9 +51,27 @@
         }
 
         .auth-floating-card {
-            background: rgba(255, 255, 255, .16);
-            border: 1px solid rgba(255, 255, 255, .28);
+            background: rgba(255, 255, 255, .62);
+            border: 1px solid rgba(59, 26, 9, .12);
             backdrop-filter: blur(10px);
+            box-shadow: 0 18px 40px rgba(59, 26, 9, .08);
+        }
+
+        .auth-side-brand {
+            color: var(--collabis-orange);
+        }
+
+        .auth-side-panel .btn-outline-light {
+            background: #ffffff;
+            border-color: var(--collabis-orange);
+            color: var(--collabis-orange);
+            font-weight: 700;
+        }
+
+        .auth-side-panel .btn-outline-light:hover {
+            background: var(--collabis-orange);
+            border-color: var(--collabis-orange);
+            color: #ffffff;
         }
 
         .auth-icon-btn {
@@ -201,7 +219,7 @@
             <div class="col-lg-6">
                 <aside class="auth-side-panel d-flex flex-column justify-content-between">
                     <div>
-                        <a class="d-inline-flex align-items-center text-white text-decoration-none fw-bold fs-4 mb-5" href="{{ path('app_home') }}">
+                        <a class="auth-side-brand d-inline-flex align-items-center text-decoration-none fw-bold fs-4 mb-5" href="{{ path('app_home') }}">
                             <i class="bi bi-rocket-takeoff-fill me-2"></i> COLLABIS
                         </a>
                         <h2 class="display-6 fw-bold mb-3">Une annonce peut lancer une vraie entraide.</h2>

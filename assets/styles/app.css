@@ -6,6 +6,9 @@
     --collabis-sand: #FFDA86;    /* Fonds de sections / Cartes */
     --collabis-blue: #2E3192;    /* Éléments de marque secondaires */
     --collabis-white: #FFFFFF;
+    --collabis-primary: var(--collabis-blue);
+    --collabis-primary-dark: #20236d;
+    --collabis-muted: #6b5b52;
 
     /* Typographie */
     --font-heading: 'Antonio', sans-serif;
