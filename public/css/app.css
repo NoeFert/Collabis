@@ -191,14 +191,17 @@ h3,
     background: var(--collabis-orange);
     border: 0;
     border-radius: 999px;
+    bottom: 2px;
     color: var(--collabis-white);
     display: inline-flex;
+    height: auto;
     justify-content: center;
+    min-height: 0;
     position: absolute;
     right: 2px;
     top: 2px;
     transition: background-color .2s ease;
-    width: 42px;
+    width: 44px;
 }
 
 .search-submit:hover,
